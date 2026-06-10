@@ -1,0 +1,21 @@
+{
+  "name": "DJ SIX – International Professional DJ",
+  "short_name": "DJ SIX",
+  "description": "World-class DJ entertainment – Book DJ SIX for your event",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#0A0A0A",
+  "theme_color": "#00D4FF",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "https://via.placeholder.com/192x192/00D4FF/0A0A0A?text=DJ6", "sizes": "192x192", "type": "image/png" },
+    { "src": "https://via.placeholder.com/512x512/00D4FF/0A0A0A?text=DJ6", "sizes": "512x512", "type": "image/png" }
+  ],
+  "categories": ["entertainment", "music"],
+  "screenshots": [],
+  "shortcuts": [
+    { "name": "Book Now", "url": "/pages/booking.html", "description": "Book DJ SIX for your event" },
+    { "name": "Mixtapes", "url": "/pages/mixtapes.html", "description": "Listen to mixtapes" },
+    { "name": "Events",   "url": "/pages/events.html",   "description": "View upcoming events" }
+  ]
+}
