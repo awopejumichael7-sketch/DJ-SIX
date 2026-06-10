@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard – DJ SIX</title>
+  <link rel="stylesheet" href="../css/global.css">
+  <style>
+    /* ── Admin Layout ── */
+    body { overflow-x:hidden; }
+    .admin-topbar {
+      position:fixed; top:0; left:260px; right:0; height:64px; z-index:200;
+      background:var(--bg2); border-bottom:1px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between; padding:0 2rem;
+      backdrop-filter:blur(20px);
+      transition:left .3s;
+    }
+    @media(max-width:900px){ .admin-topbar{left:0;} }
+    .topbar-left { display:flex; align-items:center; gap:1rem; }
+    .topbar-right { display:flex; align-items:center; gap:1rem; }
+    .admin-main { margin-left:260px; padding-top:64px; min-height:100vh; }
+    @media(max-width:900px){ .admin-main{margin-left:0;} }
+
+    .panel { display:none; padding:2rem; animation:fadeIn .3s; }
+    .panel.active { display:block; }
+
+    /* Sidebar toggle button for mobile */
+    .sidebar-toggle-btn {
+      display:none; width:38px; height:38px; border-radius:10px;
+      background:var(--surface); border:1px solid var(--border);
+      align-items:center; justify-content:center; font-size:1.1rem; cursor:pointer;
+    }
+    @media(max-width:900px){ .sidebar-toggle-btn{display:flex;} }
+
+    /* ── Stats Grid ── */
+    .stats-grid-4 { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:1.25rem; margin-bottom:2rem; }
+
+    /* ── CRUD Table Section ── */
+    .crud-header { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem; }
+    .crud-title { font-family:'Orbitron',sans-serif; font-size:1.2rem; font-weight:700; color:var(--primary); }
+    .search-bar {
+      display:flex; align-items:center; gap:.5rem;
+      background:var(--surface); border:1px solid var(--border); border-radius:50px;
+      padding:.5rem 1rem; min-width:220px;
+    }
+    .search-bar input { background:none; border:none; color:var(--text); outline:none; font-size:.875rem; flex:1; }
+
+    /* ── Modal Form ── */
+    .modal-overlay { position:fixed; inset:0; z-index:9000; background:rgba(0,0,0,.75); backdrop-filter:blur(6px); display:flex; align-items:center; justify-content:center; padding:1rem; opacity:0; pointer-events:none; transition:opacity .3s; }
+    .modal-overlay.open { opacity:1; pointer-events:all; }
+    .modal { background:var(--bg2); border:1px solid var(--border); border-radius:20px; padding:2rem; max-width:540px; width:100%; max-height:90vh; overflow-y:auto; animation:scaleIn .3s; }
+    .modal-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; }
+    .modal-title { font-family:'Orbitron',sans-serif; font-size:1.1rem; font-weight:700; color:var(--primary); }
+    .modal-close { width:34px; height:34px; border-radius:50%; background:var(--surface); border:1px solid var(--border); color:var(--text); font-size:1.2rem; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:var(--transition); }
+    .modal-close:hover { background:var(--accent); }
+
+    /* ── Confirm Delete ── */
+    .confirm-modal { max-width:380px; text-align:center; }
+    .confirm-icon { font-size:3rem; margin-bottom:1rem; }
+    .confirm-text { color:var(--text2); margin-bottom:1.5rem; font-size:.95rem; }
+    .confirm-btns { display:flex; gap:1rem; justify-content:center; }
+
+    /* ── Chart placeholder ── */
+    .chart-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:1.5rem; }
+    .chart-title { font-family:'Rajdhani',sans-serif; font-weight:700; font-size:1rem; margin-bottom:1.5rem; color:var(--text2); }
+    .mini-bar-chart { display:flex; align-items:flex-end; gap:8px; height:100px; }
+    .mini-bar {
+      flex:1; border-radius:4px 4px 0 0;
+      background:linear-gradient(to top, var(--primary), var(--secondary));
+      opacity:.7; transition:opacity .2s; cursor:pointer; position:relative;
+    }
+    .mini-bar:hover { opacity:1; }
+    .mini-bar-label { text-align:center; font-size:.65rem; color:var(--text3); margin-top:.3rem; }
+
+    /* ── Activity Feed ── */
+    .activity-item { display:flex; align-items:flex-start; gap:.875rem; padding:.875rem 0; border-bottom:1px solid var(--border); }
+    .activity-item:last-child { border-bottom:none; }
+    .activity-icon { width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0; }
+    .activity-text { font-size:.875rem; color:var(--text2); line-height:1.5; }
+    .activity-time { font-size:.72rem; color:var(--text3); margin-top:.2rem; }
+
+    /* ── Booking Status Btns ── */
+    .status-select { padding:.4rem .75rem; border-radius:8px; background:var(--surface); border:1px solid var(--border); color:var(--text); font-size:.8rem; cursor:pointer; outline:none; }
+    .action-btn { width:32px; height:32px; border-radius:8px; display:inline-flex; align-items:center; justify-content:center; font-size:.9rem; cursor:pointer; border:1px solid var(--border); background:var(--surface); transition:var(--transition); }
+    .action-btn:hover { background:var(--primary); border-color:var(--primary); color:#000; }
+    .action-btn.delete:hover { background:var(--accent); border-color:var(--accent); color:#fff; }
+    .td-actions { display:flex; gap:.4rem; align-items:center; }
+
+    /* ── Settings ── */
+    .settings-section { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:1.5rem; margin-bottom:1.5rem; }
+    .settings-title { font-family:'Rajdhani',sans-serif; font-weight:700; font-size:1rem; color:var(--primary); margin-bottom:1.25rem; }
+    .settings-row { display:flex; align-items:center; justify-content:space-between; padding:.75rem 0; border-bottom:1px solid var(--border); }
+    .settings-row:last-child { border-bottom:none; }
+    .settings-label { font-size:.9rem; font-weight:600; }
+    .settings-desc { font-size:.78rem; color:var(--text3); margin-top:.1rem; }
+    /* Toggle switch */
+    .toggle { position:relative; width:44px; height:24px; }
+    .toggle input { opacity:0; width:0; height:0; }
+    .toggle-slider { position:absolute; inset:0; background:var(--surface2); border-radius:24px; cursor:pointer; transition:.3s; border:1px solid var(--border); }
+    .toggle-slider::before { content:''; position:absolute; width:18px; height:18px; left:3px; top:2px; background:#fff; border-radius:50%; transition:.3s; }
+    .toggle input:checked + .toggle-slider { background:var(--primary); border-color:var(--primary); }
+    .toggle input:checked + .toggle-slider::before { transform:translateX(20px); }
+  </style>
+</head>
+<body>
+  <div id="loader"><div class="loader-logo">DJ SIX</div><div class="loader-bar-track"><div class="loader-bar"></div></div></div>
+
+  <!-- Sidebar -->
+  <aside class="admin-sidebar" id="admin-sidebar">
+    <div class="sidebar-logo">
+      <div class="nav-logo">DJ SIX</div>
+      <p>Admin Dashboard</p>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section-title">Main</div>
+      <div class="sidebar-nav-item active" data-panel="dashboard"><span class="icon">📊</span> Dashboard</div>
+      <div class="sidebar-section-title">Content</div>
+      <div class="sidebar-nav-item" data-panel="songs"><span class="icon">🎵</span> Songs</div>
+      <div class="sidebar-nav-item" data-panel="mixtapes"><span class="icon">📀</span> Mixtapes</div>
+      <div class="sidebar-nav-item" data-panel="videos"><span class="icon">▶</span> Videos</div>
+      <div class="sidebar-nav-item" data-panel="events"><span class="icon">📅</span> Events</div>
+      <div class="sidebar-nav-item" data-panel="gallery"><span class="icon">🖼</span> Gallery</div>
+      <div class="sidebar-nav-item" data-panel="testimonials"><span class="icon">⭐</span> Testimonials</div>
+      <div class="sidebar-section-title">Business</div>
+      <div class="sidebar-nav-item" data-panel="bookings"><span class="icon">📋</span> Bookings</div>
+      <div class="sidebar-nav-item" data-panel="messages"><span class="icon">✉️</span> Messages</div>
+      <div class="sidebar-section-title">System</div>
+      <div class="sidebar-nav-item" data-panel="analytics"><span class="icon">📈</span> Analytics</div>
+      <div class="sidebar-nav-item" data-panel="settings"><span class="icon">⚙️</span> Settings</div>
+      <div class="sidebar-nav-item" id="logout-btn"><span class="icon">🚪</span> Logout</div>
+    </nav>
+  </aside>
+
+  <!-- Top Bar -->
+  <div class="admin-topbar">
+    <div class="topbar-left">
+      <button class="sidebar-toggle-btn" id="sidebar-toggle">☰</button>
+      <div id="topbar-title" style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.1rem">Dashboard</div>
+    </div>
+    <div class="topbar-right">
+      <button class="theme-btn" id="theme-toggle" onclick="toggleTheme()">☀️</button>
+      <a href="../index.html" class="btn btn-secondary btn-sm" target="_blank">🌐 View Site</a>
+      <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--secondary));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem">A</div>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <main class="admin-main">
+
+    <!-- ── DASHBOARD PANEL ── -->
+    <div class="panel active" id="panel-dashboard">
+      <div style="margin-bottom:1.5rem">
+        <div style="font-family:'Orbitron',sans-serif;font-size:1.4rem;font-weight:900;color:var(--primary)">Welcome back, Admin! 👋</div>
+        <div style="color:var(--text3);font-size:.875rem;margin-top:.25rem" id="dash-datetime"></div>
+      </div>
+      <div class="stats-grid-4" id="dash-stats">
+        <div class="stat-widget"><div class="stat-icon" style="background:rgba(0,212,255,.1)">🎵</div><div><div class="stat-value" id="stat-songs">—</div><div class="stat-label">Total Songs</div></div></div>
+        <div class="stat-widget"><div class="stat-icon" style="background:rgba(138,43,226,.1)">📀</div><div><div class="stat-value" id="stat-mixes">—</div><div class="stat-label">Mixtapes</div></div></div>
+        <div class="stat-widget"><div class="stat-icon" style="background:rgba(255,20,147,.1)">▶</div><div><div class="stat-value" id="stat-videos">—</div><div class="stat-label">Videos</div></div></div>
+        <div class="stat-widget"><div class="stat-icon" style="background:rgba(255,215,0,.1)">📅</div><div><div class="stat-value" id="stat-events">—</div><div class="stat-label">Events</div></div></div>
+        <div class="stat-widget"><div class="stat-icon" style="background:rgba(0,212,255,.1)">🖼</div><div><div class="stat-value" id="stat-gallery">—</div><div class="stat-label">Gallery Images</div></div></div>
+        <div class="stat-widget"><div class="stat-icon" style="background:rgba(255,215,0,.1)">⭐</div><div><div class="stat-value" id="stat-testi">—</div><div class="stat-label">Testimonials</div></div></div>
+        <div class="stat-widget"><div class="stat-icon" style="background:rgba(0,200,100,.1)">📋</div><div><div class="stat-value" id="stat-bookings">—</div><div class="stat-label">Bookings</div></div></div>
+        <div class="stat-widget"><div class="stat-icon" style="background:rgba(255,20,147,.1)">✉️</div><div><div class="stat-value" id="stat-msgs">—</div><div class="stat-label">Messages</div></div></div>
+      </div>
+      <div class="grid-2">
+        <div class="chart-card">
+          <div class="chart-title">📈 Monthly Bookings</div>
+          <div class="mini-bar-chart" id="bookings-chart"></div>
+          <div style="display:flex;gap:8px;margin-top:.5rem" id="chart-labels"></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">🕐 Recent Activity</div>
+          <div id="activity-feed">
+            <div class="activity-item"><div class="activity-icon" style="background:rgba(0,212,255,.1)">📋</div><div><div class="activity-text">New booking request received</div><div class="activity-time">Just now</div></div></div>
+            <div class="activity-item"><div class="activity-icon" style="background:rgba(138,43,226,.1)">⭐</div><div><div class="activity-text">New testimonial from Chioma Okafor</div><div class="activity-time">2 hours ago</div></div></div>
+            <div class="activity-item"><div class="activity-icon" style="background:rgba(255,20,147,.1)">✉️</div><div><div class="activity-text">Contact message from Emeka</div><div class="activity-time">5 hours ago</div></div></div>
+            <div class="activity-item"><div class="activity-icon" style="background:rgba(255,215,0,.1)">📀</div><div><div class="activity-text">Mixtape "AfroFusion Vol.2" uploaded</div><div class="activity-time">1 day ago</div></div></div>
+            <div class="activity-item"><div class="activity-icon" style="background:rgba(0,200,100,.1)">📅</div><div><div class="activity-text">Event booking confirmed – Lagos</div><div class="activity-time">2 days ago</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SONGS PANEL ── -->
+    <div class="panel" id="panel-songs">
+      <div class="crud-header">
+        <div class="crud-title">🎵 Songs Manager</div>
+        <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+          <div class="search-bar"><span>🔍</span><input type="text" id="search-songs" placeholder="Search songs…"></div>
+          <button class="btn btn-primary" onclick="openModal('song')">+ Add Song</button>
+        </div>
+      </div>
+      <div class="table-container">
+        <table class="data-table">
+          <thead><tr><th>Cover</th><th>Title</th><th>Artist</th><th>Duration</th><th>Added</th><th>Actions</th></tr></thead>
+          <tbody id="songs-tbody"><tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text3)">Loading songs…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── MIXTAPES PANEL ── -->
+    <div class="panel" id="panel-mixtapes">
+      <div class="crud-header">
+        <div class="crud-title">📀 Mixtapes Manager</div>
+        <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+          <div class="search-bar"><span>🔍</span><input type="text" id="search-mixtapes" placeholder="Search mixtapes…"></div>
+          <button class="btn btn-primary" onclick="openModal('mixtape')">+ Add Mixtape</button>
+        </div>
+      </div>
+      <div class="table-container">
+        <table class="data-table">
+          <thead><tr><th>Cover</th><th>Title</th><th>Description</th><th>Duration</th><th>Release Date</th><th>Downloads</th><th>Actions</th></tr></thead>
+          <tbody id="mixtapes-tbody"><tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text3)">Loading mixtapes…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── VIDEOS PANEL ── -->
+    <div class="panel" id="panel-videos">
+      <div class="crud-header">
+        <div class="crud-title">▶ Videos Manager</div>
+        <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+          <div class="search-bar"><span>🔍</span><input type="text" id="search-videos" placeholder="Search videos…"></div>
+          <button class="btn btn-primary" onclick="openModal('video')">+ Add Video</button>
+        </div>
+      </div>
+      <div class="table-container">
+        <table class="data-table">
+          <thead><tr><th>Title</th><th>YouTube Link</th><th>Category</th><th>Added</th><th>Actions</th></tr></thead>
+          <tbody id="videos-tbody"><tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--text3)">Loading videos…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── EVENTS PANEL ── -->
+    <div class="panel" id="panel-events">
+      <div class="crud-header">
+        <div class="crud-title">📅 Events Manager</div>
+        <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+          <div class="search-bar"><span>🔍</span><input type="text" id="search-events" placeholder="Search events…"></div>
+          <button class="btn btn-primary" onclick="openModal('event')">+ Add Event</button>
+        </div>
+      </div>
+      <div class="table-container">
+        <table class="data-table">
+          <thead><tr><th>Image</th><th>Title</th><th>Venue</th><th>Date</th><th>Category</th><th>Actions</th></tr></thead>
+          <tbody id="events-tbody"><tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text3)">Loading events…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── GALLERY PANEL ── -->
+    <div class="panel" id="panel-gallery">
+      <div class="crud-header">
+        <div class="crud-title">🖼 Gallery Manager</div>
+        <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+          <div class="search-bar"><span>🔍</span><input type="text" id="search-gallery" placeholder="Search gallery…"></div>
+          <button class="btn btn-primary" onclick="openModal('gallery')">+ Add Image</button>
+        </div>
+      </div>
+      <div class="table-container">
+        <table class="data-table">
+          <thead><tr><th>Image</th><th>Title</th><th>Category</th><th>Date</th><th>Actions</th></tr></thead>
+          <tbody id="gallery-tbody"><tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--text3)">Loading gallery…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── TESTIMONIALS PANEL ── -->
+    <div class="panel" id="panel-testimonials">
+      <div class="crud-header">
+        <div class="crud-title">⭐ Testimonials Manager</div>
+        <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+          <div class="search-bar"><span>🔍</span><input type="text" id="search-testi" placeholder="Search testimonials…"></div>
+          <button class="btn btn-primary" onclick="openModal('testimonial')">+ Add Testimonial</button>
+        </div>
+      </div>
+      <div class="table-container">
+        <table class="data-table">
+          <thead><tr><th>Photo</th><th>Name</th><th>Review</th><th>Rating</th><th>Actions</th></tr></thead>
+          <tbody id="testi-tbody"><tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--text3)">Loading testimonials…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── BOOKINGS PANEL ── -->
+    <div class="panel" id="panel-bookings">
+      <div class="crud-header">
+        <div class="crud-title">📋 Bookings Manager</div>
+        <div class="search-bar"><span>🔍</span><input type="text" id="search-bookings" placeholder="Search bookings…"></div>
+      </div>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.5rem">
+        <button class="tab-btn active" data-bstatus="all">All</button>
+        <button class="tab-btn" data-bstatus="pending">Pending</button>
+        <button class="tab-btn" data-bstatus="approved">Approved</button>
+        <button class="tab-btn" data-bstatus="rejected">Rejected</button>
+        <button class="tab-btn" data-bstatus="completed">Completed</button>
+      </div>
+      <div class="table-container">
+        <table class="data-table">
+          <thead><tr><th>Name</th><th>Event Type</th><th>Date</th><th>Location</th><th>Budget</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="bookings-tbody"><tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text3)">Loading bookings…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── MESSAGES PANEL ── -->
+    <div class="panel" id="panel-messages">
+      <div class="crud-header">
+        <div class="crud-title">✉️ Messages</div>
+        <div class="search-bar"><span>🔍</span><input type="text" id="search-msgs" placeholder="Search messages…"></div>
+      </div>
+      <div class="table-container">
+        <table class="data-table">
+          <thead><tr><th>Name</th><th>Email</th><th>Subject</th><th>Message</th><th>Date</th><th>Actions</th></tr></thead>
+          <tbody id="msgs-tbody"><tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text3)">Loading messages…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── ANALYTICS PANEL ── -->
+    <div class="panel" id="panel-analytics">
+      <div class="crud-title" style="margin-bottom:1.5rem">📈 Analytics Overview</div>
+      <div class="stats-grid-4" style="margin-bottom:2rem">
+        <div class="stat-widget"><div class="stat-icon" style="background:rgba(0,212,255,.1)">👁</div><div><div class="stat-value" id="stat-visitors">—</div><div class="stat-label">Total Visitors</div><div class="stat-change">+12% this month</div></div></div>
+        <div class="stat-widget"><div class="stat-icon" style="background:rgba(138,43,226,.1)">⬇</div><div><div class="stat-value" id="stat-downloads">—</div><div class="stat-label">Total Downloads</div><div class="stat-change">+8% this month</div></div></div>
+        <div class="stat-widget"><div class="stat-icon" style="background:rgba(255,215,0,.1)">💰</div><div><div class="stat-value" id="stat-revenue">—</div><div class="stat-label">Est. Revenue</div><div class="stat-change">+25% this month</div></div></div>
+        <div class="stat-widget"><div class="stat-icon" style="background:rgba(0,200,100,.1)">✅</div><div><div class="stat-value" id="stat-completed">—</div><div class="stat-label">Completed Bookings</div><div class="stat-change">+5 this month</div></div></div>
+      </div>
+      <div class="grid-2">
+        <div class="chart-card">
+          <div class="chart-title">🎵 Top Mixtapes by Downloads</div>
+          <div id="top-mixtapes-chart" style="display:flex;flex-direction:column;gap:.75rem"></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">📅 Bookings by Event Type</div>
+          <div id="booking-types-chart" style="display:flex;flex-direction:column;gap:.75rem"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SETTINGS PANEL ── -->
+    <div class="panel" id="panel-settings">
+      <div class="crud-title" style="margin-bottom:1.5rem">⚙️ Settings</div>
+      <div class="settings-section">
+        <div class="settings-title">General Settings</div>
+        <div class="settings-row">
+          <div><div class="settings-label">Dark Mode</div><div class="settings-desc">Toggle between dark and light theme</div></div>
+          <label class="toggle"><input type="checkbox" id="setting-darkmode" checked onchange="toggleTheme()"><span class="toggle-slider"></span></label>
+        </div>
+        <div class="settings-row">
+          <div><div class="settings-label">Show Floating Music Player</div><div class="settings-desc">Display the music player on all pages</div></div>
+          <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+        </div>
+        <div class="settings-row">
+          <div><div class="settings-label">Maintenance Mode</div><div class="settings-desc">Show maintenance page to visitors</div></div>
+          <label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-title">DJ SIX Profile</div>
+        <div class="form-group"><label class="form-label">DJ Name</label><input class="form-control" value="DJ SIX"></div>
+        <div class="form-group"><label class="form-label">Phone / WhatsApp</label><input class="form-control" value="+234 000 000 0000"></div>
+        <div class="form-group"><label class="form-label">Email</label><input class="form-control" value="booking@djsix.com"></div>
+        <div class="form-group"><label class="form-label">Location</label><input class="form-control" value="Lagos, Nigeria"></div>
+        <div class="form-group"><label class="form-label">Bio</label><textarea class="form-control" rows="4">Nigeria's premier international DJ with 15+ years of experience.</textarea></div>
+        <button class="btn btn-primary" onclick="showToast('Profile settings saved!')">💾 Save Settings</button>
+      </div>
+      <div class="settings-section">
+        <div class="settings-title">Firebase Configuration</div>
+        <p style="color:var(--text2);font-size:.875rem;margin-bottom:1rem">Update your Firebase credentials below. These are required for data persistence.</p>
+        <div class="form-group"><label class="form-label">API Key</label><input class="form-control" placeholder="YOUR_API_KEY" type="password"></div>
+        <div class="form-group"><label class="form-label">Auth Domain</label><input class="form-control" placeholder="YOUR_AUTH_DOMAIN"></div>
+        <div class="form-group"><label class="form-label">Project ID</label><input class="form-control" placeholder="YOUR_PROJECT_ID"></div>
+        <div class="form-group"><label class="form-label">Storage Bucket</label><input class="form-control" placeholder="YOUR_STORAGE_BUCKET"></div>
+        <button class="btn btn-gold" onclick="showToast('Firebase config updated! Refresh to apply.','warning')">🔥 Update Firebase Config</button>
+      </div>
+      <div class="settings-section">
+        <div class="settings-title">Admin Security</div>
+        <div class="form-group"><label class="form-label">New Password</label><input class="form-control" type="password" placeholder="Enter new password"></div>
+        <div class="form-group"><label class="form-label">Confirm Password</label><input class="form-control" type="password" placeholder="Confirm new password"></div>
+        <button class="btn btn-secondary">🔐 Update Password</button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ── CRUD MODAL ── -->
+  <div class="modal-overlay" id="crud-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title" id="modal-title">Add Item</div>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div id="modal-body"></div>
+      <div style="display:flex;gap:.75rem;margin-top:1.5rem">
+        <button class="btn btn-primary" style="flex:1;justify-content:center" id="modal-save-btn">💾 Save</button>
+        <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CONFIRM DELETE MODAL ── -->
+  <div class="modal-overlay" id="confirm-modal">
+    <div class="modal confirm-modal">
+      <div class="confirm-icon">🗑️</div>
+      <div class="modal-title" style="text-align:center;margin-bottom:.5rem">Confirm Delete</div>
+      <div class="confirm-text" id="confirm-text">Are you sure you want to delete this item? This action cannot be undone.</div>
+      <div class="confirm-btns">
+        <button class="btn btn-accent" id="confirm-delete-btn">Yes, Delete</button>
+        <button class="btn btn-secondary" onclick="closeConfirm()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+  <script src="../js/firebase-config.js"></script>
+  <script src="../js/components.js"></script>
+  <script>
+    // ── Auth Guard ──
+    if (localStorage.getItem('adminLoggedIn') !== 'true') window.location.href = 'admin-login.html';
+
+    // ── Logout ──
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      localStorage.removeItem('adminLoggedIn');
+      window.location.href = 'admin-login.html';
+    });
+
+    // ── Sidebar ──
+    document.getElementById('sidebar-toggle').addEventListener('click', () => {
+      document.getElementById('admin-sidebar').classList.toggle('open');
+    });
+
+    // ── Panel Navigation ──
+    const panels = {};
+    document.querySelectorAll('.panel').forEach(p => panels[p.id.replace('panel-','')] = p);
+    let currentPanel = 'dashboard';
+
+    document.querySelectorAll('.sidebar-nav-item[data-panel]').forEach(item => {
+      item.addEventListener('click', () => {
+        document.querySelectorAll('.sidebar-nav-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        const target = item.dataset.panel;
+        Object.values(panels).forEach(p => p.classList.remove('active'));
+        if (panels[target]) { panels[target].classList.add('active'); currentPanel = target; }
+        document.getElementById('topbar-title').textContent = item.textContent.trim();
+        // Load data for panel
+        if (target === 'songs') loadSongs();
+        if (target === 'mixtapes') loadAdminMixtapes();
+        if (target === 'videos') loadAdminVideos();
+        if (target === 'events') loadAdminEvents();
+        if (target === 'gallery') loadAdminGallery();
+        if (target === 'testimonials') loadAdminTesti();
+        if (target === 'bookings') loadBookings();
+        if (target === 'messages') loadMessages();
+        if (target === 'analytics') loadAnalytics();
+        // Close sidebar on mobile
+        document.getElementById('admin-sidebar').classList.remove('open');
+      });
+    });
+
+    // ── DateTime ──
+    function updateDateTime() {
+      const now = new Date();
+      document.getElementById('dash-datetime').textContent = now.toLocaleString('en-NG', { weekday:'long', year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit' });
+    }
+    updateDateTime(); setInterval(updateDateTime, 60000);
+
+    // ── Dashboard Stats ──
+    async function loadDashboardStats() {
+      const collections = ['songs','mixtapes','videos','events','gallery','testimonials','bookings','messages'];
+      const ids = ['stat-songs','stat-mixes','stat-videos','stat-events','stat-gallery','stat-testi','stat-bookings','stat-msgs'];
+      try {
+        if (typeof db !== 'undefined') {
+          const counts = await Promise.all(collections.map(c => db.collection(c).get().catch(()=>({size:0}))));
+          counts.forEach((snap,i) => { document.getElementById(ids[i]).textContent = snap.size || 0; });
+        } else {
+          ids.forEach((id,i) => { document.getElementById(id).textContent = [5,6,4,6,18,9,8,3][i]; });
+        }
+      } catch(e) {
+        ids.forEach((id,i) => { document.getElementById(id).textContent = [5,6,4,6,18,9,8,3][i]; });
+      }
+    }
+
+    // ── Bar Chart ──
+    function buildBarChart() {
+      const chart = document.getElementById('bookings-chart');
+      const labels = document.getElementById('chart-labels');
+      const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      const vals = [3,5,4,7,9,6,8,12,10,7,11,8];
+      const max = Math.max(...vals);
+      chart.innerHTML = vals.map((v,i) => `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><div class="mini-bar" style="height:${(v/max)*90}px" title="${months[i]}: ${v} bookings"></div><div class="mini-bar-label">${months[i].slice(0,1)}</div></div>`).join('');
+    }
+
+    // ── Modal ──
+    let modalType = '', editId = null;
+    const FORMS = {
+      song: () => `
+        <div class="form-group"><label class="form-label">Title *</label><input class="form-control" id="f-title" placeholder="Song title"></div>
+        <div class="form-group"><label class="form-label">Artist</label><input class="form-control" id="f-artist" placeholder="Artist name"></div>
+        <div class="form-group"><label class="form-label">Cover Image URL</label><input class="form-control" id="f-cover" placeholder="https://…"></div>
+        <div class="form-group"><label class="form-label">Audio URL (Firebase Storage or direct link)</label><input class="form-control" id="f-audio" placeholder="https://…"></div>
+        <div class="form-group"><label class="form-label">Duration</label><input class="form-control" id="f-duration" placeholder="3:45"></div>`,
+      mixtape: () => `
+        <div class="form-group"><label class="form-label">Title *</label><input class="form-control" id="f-title" placeholder="Mixtape title"></div>
+        <div class="form-group"><label class="form-label">Description</label><textarea class="form-control" id="f-desc" rows="3" placeholder="Short description"></textarea></div>
+        <div class="form-group"><label class="form-label">Cover Image URL</label><input class="form-control" id="f-cover" placeholder="https://…"></div>
+        <div class="form-group"><label class="form-label">Audio URL</label><input class="form-control" id="f-audio" placeholder="https://…"></div>
+        <div class="form-group"><label class="form-label">Duration</label><input class="form-control" id="f-duration" placeholder="45:00"></div>
+        <div class="form-group"><label class="form-label">Release Date</label><input type="date" class="form-control" id="f-date"></div>
+        <div class="form-group"><label class="form-label">Genre</label><select class="form-control" id="f-genre"><option value="afrobeats">Afrobeats</option><option value="amapiano">Amapiano</option><option value="hiphop">Hip-Hop</option><option value="house">House</option><option value="rnb">R&B</option></select></div>`,
+      video: () => `
+        <div class="form-group"><label class="form-label">Title *</label><input class="form-control" id="f-title" placeholder="Video title"></div>
+        <div class="form-group"><label class="form-label">YouTube Embed URL *</label><input class="form-control" id="f-youtube" placeholder="https://www.youtube.com/embed/VIDEO_ID"></div>
+        <div class="form-group"><label class="form-label">Category</label><select class="form-control" id="f-cat"><option value="featured">Featured</option><option value="club">Club Sessions</option><option value="live">Live Performances</option><option value="wedding">Wedding Events</option><option value="highlights">Event Highlights</option></select></div>`,
+      event: () => `
+        <div class="form-group"><label class="form-label">Title *</label><input class="form-control" id="f-title" placeholder="Event title"></div>
+        <div class="form-group"><label class="form-label">Image URL</label><input class="form-control" id="f-cover" placeholder="https://…"></div>
+        <div class="form-group"><label class="form-label">Venue *</label><input class="form-control" id="f-venue" placeholder="Venue name & city"></div>
+        <div class="form-group"><label class="form-label">Date *</label><input type="date" class="form-control" id="f-date"></div>
+        <div class="form-group"><label class="form-label">Description</label><textarea class="form-control" id="f-desc" rows="3"></textarea></div>
+        <div class="form-group"><label class="form-label">Category</label><select class="form-control" id="f-cat"><option value="upcoming">Upcoming</option><option value="featured">Featured</option><option value="past">Past</option></select></div>`,
+      gallery: () => `
+        <div class="form-group"><label class="form-label">Title *</label><input class="form-control" id="f-title" placeholder="Image title"></div>
+        <div class="form-group"><label class="form-label">Image URL *</label><input class="form-control" id="f-cover" placeholder="https://…"></div>
+        <div class="form-group"><label class="form-label">Category</label><select class="form-control" id="f-cat"><option value="weddings">Weddings</option><option value="clubs">Clubs</option><option value="birthdays">Birthdays</option><option value="concerts">Concerts</option><option value="corporate">Corporate</option></select></div>
+        <div class="form-group"><label class="form-label">Date</label><input type="date" class="form-control" id="f-date"></div>`,
+      testimonial: () => `
+        <div class="form-group"><label class="form-label">Client Name *</label><input class="form-control" id="f-name" placeholder="Full name"></div>
+        <div class="form-group"><label class="form-label">Photo URL</label><input class="form-control" id="f-cover" placeholder="https://…"></div>
+        <div class="form-group"><label class="form-label">Role / Event Type</label><input class="form-control" id="f-role" placeholder="e.g. Bride – Lagos"></div>
+        <div class="form-group"><label class="form-label">Review *</label><textarea class="form-control" id="f-review" rows="4" placeholder="Client review…"></textarea></div>
+        <div class="form-group"><label class="form-label">Rating</label><select class="form-control" id="f-rating"><option value="5">★★★★★ (5)</option><option value="4">★★★★ (4)</option><option value="3">★★★ (3)</option><option value="2">★★ (2)</option><option value="1">★ (1)</option></select></div>`,
+    };
+
+    function openModal(type, data=null) {
+      modalType = type; editId = data?.id || null;
+      document.getElementById('modal-title').textContent = (data ? 'Edit' : 'Add') + ' ' + type.charAt(0).toUpperCase() + type.slice(1);
+      document.getElementById('modal-body').innerHTML = FORMS[type]?.() || '';
+      // Pre-fill if editing
+      if (data) {
+        if (document.getElementById('f-title')) document.getElementById('f-title').value = data.title || '';
+        if (document.getElementById('f-desc'))  document.getElementById('f-desc').value  = data.description || '';
+        if (document.getElementById('f-cover')) document.getElementById('f-cover').value = data.image || data.cover || '';
+        if (document.getElementById('f-audio')) document.getElementById('f-audio').value = data.audio || data.audioUrl || '';
+        if (document.getElementById('f-duration')) document.getElementById('f-duration').value = data.duration || '';
+        if (document.getElementById('f-date'))  document.getElementById('f-date').value  = data.date || data.releaseDate || '';
+        if (document.getElementById('f-youtube')) document.getElementById('f-youtube').value = data.youtubeLink || '';
+        if (document.getElementById('f-cat'))   document.getElementById('f-cat').value   = data.category || '';
+        if (document.getElementById('f-venue')) document.getElementById('f-venue').value = data.venue || '';
+        if (document.getElementById('f-name'))  document.getElementById('f-name').value  = data.name || '';
+        if (document.getElementById('f-role'))  document.getElementById('f-role').value  = data.role || '';
+        if (document.getElementById('f-review')) document.getElementById('f-review').value = data.review || '';
+        if (document.getElementById('f-rating')) document.getElementById('f-rating').value = data.rating || '5';
+        if (document.getElementById('f-artist')) document.getElementById('f-artist').value = data.artist || '';
+        if (document.getElementById('f-genre')) document.getElementById('f-genre').value = data.genre || '';
+      }
+      document.getElementById('crud-modal').classList.add('open');
+    }
+
+    function closeModal() { document.getElementById('crud-modal').classList.remove('open'); editId=null; }
+
+    document.getElementById('modal-save-btn').addEventListener('click', async () => {
+      const getData = (id) => document.getElementById(id)?.value?.trim() || '';
+      let docData = {};
+      if (modalType==='song') {
+        const title=getData('f-title');if(!title){showToast('Title required','error');return;}
+        docData={title,artist:getData('f-artist'),cover:getData('f-cover'),audioUrl:getData('f-audio'),duration:getData('f-duration')};
+      } else if (modalType==='mixtape') {
+        const title=getData('f-title');if(!title){showToast('Title required','error');return;}
+        docData={title,description:getData('f-desc'),image:getData('f-cover'),audio:getData('f-audio'),duration:getData('f-duration'),releaseDate:getData('f-date'),genre:getData('f-genre'),downloads:0};
+      } else if (modalType==='video') {
+        const title=getData('f-title');if(!title){showToast('Title required','error');return;}
+        docData={title,youtubeLink:getData('f-youtube'),category:getData('f-cat')};
+      } else if (modalType==='event') {
+        const title=getData('f-title');if(!title){showToast('Title required','error');return;}
+        docData={title,image:getData('f-cover'),venue:getData('f-venue'),date:getData('f-date'),description:getData('f-desc'),category:getData('f-cat')};
+      } else if (modalType==='gallery') {
+        const title=getData('f-title');if(!title){showToast('Title required','error');return;}
+        docData={title,image:getData('f-cover'),category:getData('f-cat'),date:getData('f-date')};
+      } else if (modalType==='testimonial') {
+        const name=getData('f-name');if(!name){showToast('Name required','error');return;}
+        docData={name,photo:getData('f-cover'),role:getData('f-role'),review:getData('f-review'),rating:parseInt(getData('f-rating'))};
+      }
+      const collMap={song:'songs',mixtape:'mixtapes',video:'videos',event:'events',gallery:'gallery',testimonial:'testimonials'};
+      const coll=collMap[modalType];
+      try {
+        if (typeof db !== 'undefined') {
+          if (editId) { await db.collection(coll).doc(editId).update({...docData,updatedAt:firebase.firestore.FieldValue.serverTimestamp()}); }
+          else { await db.collection(coll).add({...docData,createdAt:firebase.firestore.FieldValue.serverTimestamp()}); }
+        }
+        showToast(editId ? 'Updated successfully!' : 'Added successfully!');
+        closeModal();
+        // Reload the relevant panel
+        const reloaders={songs:loadSongs,mixtapes:loadAdminMixtapes,videos:loadAdminVideos,events:loadAdminEvents,gallery:loadAdminGallery,testimonials:loadAdminTesti};
+        if(reloaders[coll]) reloaders[coll]();
+      } catch(e){ showToast('Save failed: '+e.message,'error'); }
+    });
+
+    // ── Delete ──
+    let deleteId='', deleteColl='';
+    function confirmDelete(id, coll, label='this item') {
+      deleteId=id; deleteColl=coll;
+      document.getElementById('confirm-text').textContent=`Are you sure you want to delete "${label}"? This action cannot be undone.`;
+      document.getElementById('confirm-modal').classList.add('open');
+    }
+    function closeConfirm() { document.getElementById('confirm-modal').classList.remove('open'); }
+    document.getElementById('confirm-delete-btn').addEventListener('click', async()=>{
+      try {
+        if(typeof db!=='undefined') await db.collection(deleteColl).doc(deleteId).delete();
+        showToast('Deleted successfully!');
+        closeConfirm();
+        const reloaders={songs:loadSongs,mixtapes:loadAdminMixtapes,videos:loadAdminVideos,events:loadAdminEvents,gallery:loadAdminGallery,testimonials:loadAdminTesti,bookings:loadBookings,messages:loadMessages};
+        if(reloaders[deleteColl]) reloaders[deleteColl]();
+      } catch(e){ showToast('Delete failed','error'); }
+    });
+
+    // ── Helpers ──
+    function thumb(url, size=36) { return url ? `<img src="${url}" style="width:${size}px;height:${size}px;border-radius:6px;object-fit:cover;border:1px solid var(--border)">` : `<div style="width:${size}px;height:${size}px;border-radius:6px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:.7rem;color:var(--text3)">N/A</div>`; }
+    function actionBtns(id, coll, data, type) {
+      return `<div class="td-actions">
+        <button class="action-btn" title="Edit" onclick='openModal("${type}",${JSON.stringify(data)})'>✏️</button>
+        <button class="action-btn delete" title="Delete" onclick="confirmDelete('${id}','${coll}','${(data.title||data.name||'').replace(/'/g,"\\'")}')">🗑️</button>
+      </div>`;
+    }
+    function emptyRow(cols, msg='No data found.') { return `<tr><td colspan="${cols}" style="text-align:center;padding:2.5rem;color:var(--text3)">${msg}</td></tr>`; }
+    function fmtDate(d) { try{ return new Date(d?.seconds?d.seconds*1000:d).toLocaleDateString('en-NG',{year:'numeric',month:'short',day:'numeric'}); }catch{return d||'—';} }
+
+    // ── SONGS ──
+    let songsData=[];
+    async function loadSongs() {
+      const tbody=document.getElementById('songs-tbody');
+      tbody.innerHTML=`<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text3)">Loading…</td></tr>`;
+      try {
+        if(typeof db!=='undefined'){
+          const snap=await db.collection('songs').orderBy('createdAt','desc').get();
+          songsData=snap.docs.map(d=>({id:d.id,...d.data()}));
+        } else { songsData=[{id:'s1',title:'Club Nights',artist:'DJ SIX',cover:'https://picsum.photos/seed/s1/36/36',audioUrl:'',duration:'4:22',createdAt:'2024-01-01'}]; }
+      } catch(e){ songsData=[]; }
+      renderSongs();
+    }
+    function renderSongs(filter='') {
+      const data=filter?songsData.filter(s=>(s.title+s.artist).toLowerCase().includes(filter.toLowerCase())):songsData;
+      const tbody=document.getElementById('songs-tbody');
+      if(!data.length){tbody.innerHTML=emptyRow(6,'No songs yet. Add your first song!');return;}
+      tbody.innerHTML=data.map(s=>`<tr>
+        <td>${thumb(s.cover)}</td>
+        <td style="font-weight:600">${s.title||'—'}</td>
+        <td>${s.artist||'—'}</td>
+        <td><span class="badge badge-primary">${s.duration||'—'}</span></td>
+        <td style="font-size:.8rem;color:var(--text3)">${fmtDate(s.createdAt)}</td>
+        <td>${actionBtns(s.id,'songs',s,'song')}</td>
+      </tr>`).join('');
+    }
+    document.getElementById('search-songs').addEventListener('input',e=>renderSongs(e.target.value));
+
+    // ── MIXTAPES ──
+    let mixtapesData=[];
+    async function loadAdminMixtapes() {
+      document.getElementById('mixtapes-tbody').innerHTML=`<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text3)">Loading…</td></tr>`;
+      try {
+        if(typeof db!=='undefined'){const snap=await db.collection('mixtapes').orderBy('createdAt','desc').get();mixtapesData=snap.docs.map(d=>({id:d.id,...d.data()}));}
+        else{mixtapesData=[{id:'m1',title:'AfroFusion Vol.1',description:'Best Afrobeats',image:'https://picsum.photos/seed/m1/36/36',duration:'45:00',releaseDate:'2024-01-15',downloads:1240}];}
+      }catch(e){mixtapesData=[];}
+      renderAdminMixtapes();
+    }
+    function renderAdminMixtapes(filter='') {
+      const data=filter?mixtapesData.filter(m=>m.title.toLowerCase().includes(filter.toLowerCase())):mixtapesData;
+      const tbody=document.getElementById('mixtapes-tbody');
+      if(!data.length){tbody.innerHTML=emptyRow(7,'No mixtapes yet.');return;}
+      tbody.innerHTML=data.map(m=>`<tr>
+        <td>${thumb(m.image)}</td>
+        <td style="font-weight:600">${m.title}</td>
+        <td style="max-width:180px;font-size:.8rem;color:var(--text2)">${(m.description||'').slice(0,60)}${m.description?.length>60?'…':''}</td>
+        <td><span class="badge badge-primary">${m.duration||'—'}</span></td>
+        <td style="font-size:.8rem;color:var(--text3)">${m.releaseDate||'—'}</td>
+        <td><span class="badge badge-secondary">${(m.downloads||0).toLocaleString()}</span></td>
+        <td>${actionBtns(m.id,'mixtapes',m,'mixtape')}</td>
+      </tr>`).join('');
+    }
+    document.getElementById('search-mixtapes').addEventListener('input',e=>renderAdminMixtapes(e.target.value));
+
+    // ── VIDEOS ──
+    let videosData=[];
+    async function loadAdminVideos() {
+      document.getElementById('videos-tbody').innerHTML=`<tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--text3)">Loading…</td></tr>`;
+      try {
+        if(typeof db!=='undefined'){const snap=await db.collection('videos').orderBy('createdAt','desc').get();videosData=snap.docs.map(d=>({id:d.id,...d.data()}));}
+        else{videosData=[{id:'v1',title:'Club Night 2024',youtubeLink:'https://www.youtube.com/embed/dQw4w9WgXcQ',category:'featured',createdAt:'2024-01-01'}];}
+      }catch(e){videosData=[];}
+      renderAdminVideos();
+    }
+    function renderAdminVideos(filter='') {
+      const data=filter?videosData.filter(v=>v.title.toLowerCase().includes(filter.toLowerCase())):videosData;
+      const tbody=document.getElementById('videos-tbody');
+      if(!data.length){tbody.innerHTML=emptyRow(5,'No videos yet.');return;}
+      tbody.innerHTML=data.map(v=>`<tr>
+        <td style="font-weight:600">${v.title}</td>
+        <td style="font-size:.75rem;color:var(--text3);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${v.youtubeLink||'—'}</td>
+        <td><span class="badge badge-primary">${v.category||'—'}</span></td>
+        <td style="font-size:.8rem;color:var(--text3)">${fmtDate(v.createdAt)}</td>
+        <td>${actionBtns(v.id,'videos',v,'video')}</td>
+      </tr>`).join('');
+    }
+    document.getElementById('search-videos').addEventListener('input',e=>renderAdminVideos(e.target.value));
+
+    // ── EVENTS ──
+    let eventsData=[];
+    async function loadAdminEvents() {
+      document.getElementById('events-tbody').innerHTML=`<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text3)">Loading…</td></tr>`;
+      try {
+        if(typeof db!=='undefined'){const snap=await db.collection('events').orderBy('date','desc').get();eventsData=snap.docs.map(d=>({id:d.id,...d.data()}));}
+        else{eventsData=[{id:'e1',title:'AfroFest Lagos 2025',image:'https://picsum.photos/seed/e1/36/36',venue:'Eko Convention Centre',date:'2025-08-15',category:'upcoming'}];}
+      }catch(e){eventsData=[];}
+      renderAdminEvents();
+    }
+    function renderAdminEvents(filter='') {
+      const data=filter?eventsData.filter(e=>e.title.toLowerCase().includes(filter.toLowerCase())):eventsData;
+      const tbody=document.getElementById('events-tbody');
+      if(!data.length){tbody.innerHTML=emptyRow(6,'No events yet.');return;}
+      tbody.innerHTML=data.map(ev=>`<tr>
+        <td>${thumb(ev.image)}</td>
+        <td style="font-weight:600">${ev.title}</td>
+        <td style="font-size:.85rem;color:var(--text2)">${ev.venue||'—'}</td>
+        <td style="font-size:.8rem">${ev.date||'—'}</td>
+        <td><span class="badge badge-${ev.category==='upcoming'?'primary':ev.category==='featured'?'gold':'secondary'}">${ev.category||'—'}</span></td>
+        <td>${actionBtns(ev.id,'events',ev,'event')}</td>
+      </tr>`).join('');
+    }
+    document.getElementById('search-events').addEventListener('input',e=>renderAdminEvents(e.target.value));
+
+    // ── GALLERY ──
+    let galleryData=[];
+    async function loadAdminGallery() {
+      document.getElementById('gallery-tbody').innerHTML=`<tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--text3)">Loading…</td></tr>`;
+      try {
+        if(typeof db!=='undefined'){const snap=await db.collection('gallery').orderBy('createdAt','desc').get();galleryData=snap.docs.map(d=>({id:d.id,...d.data()}));}
+        else{galleryData=[{id:'g1',title:'Wedding Bliss',image:'https://picsum.photos/seed/dj1/36/36',category:'weddings',date:'2024-06-01'}];}
+      }catch(e){galleryData=[];}
+      renderAdminGallery();
+    }
+    function renderAdminGallery(filter='') {
+      const data=filter?galleryData.filter(g=>g.title.toLowerCase().includes(filter.toLowerCase())):galleryData;
+      const tbody=document.getElementById('gallery-tbody');
+      if(!data.length){tbody.innerHTML=emptyRow(5,'No gallery images yet.');return;}
+      tbody.innerHTML=data.map(g=>`<tr>
+        <td>${thumb(g.image,40)}</td>
+        <td style="font-weight:600">${g.title}</td>
+        <td><span class="badge badge-secondary">${g.category||'—'}</span></td>
+        <td style="font-size:.8rem;color:var(--text3)">${g.date||'—'}</td>
+        <td>${actionBtns(g.id,'gallery',g,'gallery')}</td>
+      </tr>`).join('');
+    }
+    document.getElementById('search-gallery').addEventListener('input',e=>renderAdminGallery(e.target.value));
+
+    // ── TESTIMONIALS ──
+    let testiData=[];
+    async function loadAdminTesti() {
+      document.getElementById('testi-tbody').innerHTML=`<tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--text3)">Loading…</td></tr>`;
+      try {
+        if(typeof db!=='undefined'){const snap=await db.collection('testimonials').orderBy('createdAt','desc').get();testiData=snap.docs.map(d=>({id:d.id,...d.data()}));}
+        else{testiData=[{id:'t1',name:'Chioma Okafor',photo:'https://i.pravatar.cc/36?img=1',review:'Amazing DJ!',rating:5,role:'Bride'}];}
+      }catch(e){testiData=[];}
+      renderAdminTesti();
+    }
+    function renderAdminTesti(filter='') {
+      const data=filter?testiData.filter(t=>t.name.toLowerCase().includes(filter.toLowerCase())):testiData;
+      const tbody=document.getElementById('testi-tbody');
+      if(!data.length){tbody.innerHTML=emptyRow(5,'No testimonials yet.');return;}
+      tbody.innerHTML=data.map(t=>`<tr>
+        <td>${thumb(t.photo)}</td>
+        <td style="font-weight:600">${t.name}<br><small style="color:var(--text3)">${t.role||''}</small></td>
+        <td style="max-width:200px;font-size:.82rem;color:var(--text2)">${(t.review||'').slice(0,80)}${t.review?.length>80?'…':''}</td>
+        <td><span style="color:var(--gold)">${'★'.repeat(t.rating||5)}</span></td>
+        <td>${actionBtns(t.id,'testimonials',t,'testimonial')}</td>
+      </tr>`).join('');
+    }
+    document.getElementById('search-testi').addEventListener('input',e=>renderAdminTesti(e.target.value));
+
+    // ── BOOKINGS ──
+    let bookingsData=[], bookingStatus='all';
+    const DEMO_BOOKINGS=[
+      {id:'b1',name:'Adaeze Obi',phone:'+234 801 111 2222',email:'adaeze@gmail.com',eventType:'Wedding',eventDate:'2025-08-20',location:'Lagos',budget:'₦500k–₦1M',message:'Need DJ for 5hrs',status:'pending',createdAt:'2025-06-01'},
+      {id:'b2',name:'Emeka Fashola',phone:'+234 802 333 4444',email:'emeka@company.com',eventType:'Corporate Event',eventDate:'2025-07-15',location:'Abuja',budget:'₦1M–₦2M',message:'Annual gala',status:'approved',createdAt:'2025-05-28'},
+      {id:'b3',name:'Ngozi Eze',phone:'+234 803 555 6666',email:'ngozi@hotmail.com',eventType:'Birthday Party',eventDate:'2025-07-30',location:'Port Harcourt',budget:'₦200k–₦500k',message:'30th birthday',status:'completed',createdAt:'2025-05-20'},
+    ];
+    async function loadBookings() {
+      document.getElementById('bookings-tbody').innerHTML=`<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text3)">Loading…</td></tr>`;
+      try {
+        if(typeof db!=='undefined'){const snap=await db.collection('bookings').orderBy('createdAt','desc').get();bookingsData=snap.docs.map(d=>({id:d.id,...d.data()}));}
+        else{bookingsData=DEMO_BOOKINGS;}
+      }catch(e){bookingsData=DEMO_BOOKINGS;}
+      renderBookings();
+    }
+    function renderBookings(filter='') {
+      let data=bookingsData;
+      if(bookingStatus!=='all') data=data.filter(b=>b.status===bookingStatus);
+      if(filter) data=data.filter(b=>(b.name+b.eventType+b.location).toLowerCase().includes(filter.toLowerCase()));
+      const tbody=document.getElementById('bookings-tbody');
+      if(!data.length){tbody.innerHTML=emptyRow(7,'No bookings found.');return;}
+      tbody.innerHTML=data.map(b=>`<tr>
+        <td><div style="font-weight:600">${b.name}</div><div style="font-size:.75rem;color:var(--text3)">${b.phone||''}</div></td>
+        <td style="font-size:.875rem">${b.eventType||'—'}</td>
+        <td style="font-size:.8rem">${b.eventDate||'—'}</td>
+        <td style="font-size:.8rem;color:var(--text2)">${b.location||'—'}</td>
+        <td style="font-size:.8rem">${b.budget||'—'}</td>
+        <td>
+          <select class="status-select" onchange="updateBookingStatus('${b.id}',this.value)">
+            <option value="pending" ${b.status==='pending'?'selected':''}>⏳ Pending</option>
+            <option value="approved" ${b.status==='approved'?'selected':''}>✅ Approved</option>
+            <option value="rejected" ${b.status==='rejected'?'selected':''}>❌ Rejected</option>
+            <option value="completed" ${b.status==='completed'?'selected':''}>🏁 Completed</option>
+          </select>
+        </td>
+        <td><div class="td-actions">
+          <button class="action-btn delete" title="Delete" onclick="confirmDelete('${b.id}','bookings','${b.name.replace(/'/g,"\\'")}')">🗑️</button>
+        </div></td>
+      </tr>`).join('');
+    }
+    async function updateBookingStatus(id, status) {
+      try {
+        if(typeof db!=='undefined') await db.collection('bookings').doc(id).update({status});
+        const b=bookingsData.find(b=>b.id===id); if(b) b.status=status;
+        showToast('Status updated to: '+status);
+      }catch(e){ showToast('Update failed','error'); }
+    }
+    document.getElementById('search-bookings').addEventListener('input',e=>renderBookings(e.target.value));
+    document.querySelectorAll('[data-bstatus]').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        document.querySelectorAll('[data-bstatus]').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active'); bookingStatus=btn.dataset.bstatus; renderBookings();
+      });
+    });
+
+    // ── MESSAGES ──
+    let messagesData=[];
+    const DEMO_MSGS=[
+      {id:'msg1',name:'Kunle Adeola',email:'kunle@gmail.com',subject:'Booking Inquiry',message:'Hi, I would like to book DJ SIX for my wedding in December.',createdAt:'2025-06-01'},
+      {id:'msg2',name:'Amaka Johnson',email:'amaka@yahoo.com',subject:'Availability Check',message:'Is DJ SIX available on August 5th for a birthday party?',createdAt:'2025-05-30'},
+      {id:'msg3',name:'Tunde Bello',email:'tunde@corp.com',subject:'Corporate Event',message:'We need a DJ for our annual company dinner. Budget flexible.',createdAt:'2025-05-28'},
+    ];
+    async function loadMessages() {
+      document.getElementById('msgs-tbody').innerHTML=`<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text3)">Loading…</td></tr>`;
+      try {
+        if(typeof db!=='undefined'){const snap=await db.collection('messages').orderBy('createdAt','desc').get();messagesData=snap.docs.map(d=>({id:d.id,...d.data()}));}
+        else{messagesData=DEMO_MSGS;}
+      }catch(e){messagesData=DEMO_MSGS;}
+      renderMessages();
+    }
+    function renderMessages(filter='') {
+      const data=filter?messagesData.filter(m=>(m.name+m.subject+m.email).toLowerCase().includes(filter.toLowerCase())):messagesData;
+      const tbody=document.getElementById('msgs-tbody');
+      if(!data.length){tbody.innerHTML=emptyRow(6,'No messages yet.');return;}
+      tbody.innerHTML=data.map(m=>`<tr>
+        <td style="font-weight:600">${m.name}</td>
+        <td style="font-size:.8rem"><a href="mailto:${m.email}" style="color:var(--primary)">${m.email}</a></td>
+        <td style="font-weight:600;font-size:.875rem">${m.subject||'—'}</td>
+        <td style="max-width:200px;font-size:.8rem;color:var(--text2)">${(m.message||'').slice(0,80)}${m.message?.length>80?'…':''}</td>
+        <td style="font-size:.75rem;color:var(--text3)">${fmtDate(m.createdAt)}</td>
+        <td><div class="td-actions">
+          <button class="action-btn" title="Reply" onclick="window.open('mailto:${m.email}?subject=Re: ${encodeURIComponent(m.subject||'')}')">↩️</button>
+          <button class="action-btn delete" title="Delete" onclick="confirmDelete('${m.id}','messages','message from ${m.name.replace(/'/g,"\\'")}')">🗑️</button>
+        </div></td>
+      </tr>`).join('');
+    }
+    document.getElementById('search-msgs').addEventListener('input',e=>renderMessages(e.target.value));
+
+    // ── ANALYTICS ──
+    async function loadAnalytics() {
+      // Visitors
+      try {
+        if(typeof db!=='undefined'){
+          const vSnap=await db.collection('analytics').doc('visitors').get();
+          document.getElementById('stat-visitors').textContent=(vSnap.data()?.count||0).toLocaleString();
+        } else { document.getElementById('stat-visitors').textContent='2,847'; }
+      }catch(e){ document.getElementById('stat-visitors').textContent='2,847'; }
+      document.getElementById('stat-downloads').textContent='4,920';
+      document.getElementById('stat-revenue').textContent='₦8.2M';
+      document.getElementById('stat-completed').textContent='42';
+      // Top mixtapes
+      const topMixes=[{title:'Amapiano Heat',downloads:1890},{title:'AfroFusion Vol.1',downloads:1240},{title:'Club Bangers',downloads:980},{title:'Wedding Vibes',downloads:754}];
+      const maxD=topMixes[0].downloads;
+      document.getElementById('top-mixtapes-chart').innerHTML=topMixes.map(m=>`
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:.25rem"><span>${m.title}</span><span style="color:var(--primary)">${m.downloads.toLocaleString()}</span></div>
+          <div style="height:6px;background:var(--surface2);border-radius:6px;overflow:hidden"><div style="height:100%;width:${(m.downloads/maxD)*100}%;background:linear-gradient(90deg,var(--primary),var(--secondary));border-radius:6px;transition:width 1s"></div></div>
+        </div>`).join('');
+      // Booking types
+      const types=[{type:'Wedding',count:38},{type:'Club Night',count:25},{type:'Corporate',count:20},{type:'Birthday',count:17}];
+      const maxC=types[0].count;
+      document.getElementById('booking-types-chart').innerHTML=types.map(t=>`
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:.25rem"><span>${t.type}</span><span style="color:var(--secondary)">${t.count}</span></div>
+          <div style="height:6px;background:var(--surface2);border-radius:6px;overflow:hidden"><div style="height:100%;width:${(t.count/maxC)*100}%;background:linear-gradient(90deg,var(--secondary),var(--accent));border-radius:6px;transition:width 1s"></div></div>
+        </div>`).join('');
+    }
+
+    // ── Init ──
+    document.addEventListener('DOMContentLoaded', () => {
+      loadDashboardStats();
+      buildBarChart();
+    });
+  </script>
+</body>
+</html>

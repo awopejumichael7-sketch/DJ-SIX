@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery – DJ SIX</title>
+  <link rel="stylesheet" href="../css/global.css"><link rel="stylesheet" href="../css/music-player.css">
+  <style>
+    .page-hero { min-height:35vh;display:flex;align-items:center;padding-top:100px;background:radial-gradient(ellipse at 50% 50%,rgba(138,43,226,.2) 0%,transparent 60%),var(--bg);position:relative;overflow:hidden; }
+    .page-hero-title { font-family:'Orbitron',sans-serif;font-size:clamp(2rem,6vw,4rem);font-weight:900;background:linear-gradient(135deg,var(--secondary),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
+    .breadcrumb { display:flex;align-items:center;gap:.5rem;color:var(--text3);font-size:.875rem;margin-top:.75rem; }
+    .breadcrumb a { color:var(--primary); }
+
+    .gallery-masonry {
+      columns: 4 200px;
+      gap: 1rem;
+    }
+    .gal-item {
+      break-inside: avoid;
+      margin-bottom: 1rem;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      border: 1px solid var(--border);
+    }
+    .gal-item img { width:100%;display:block;transition:transform .4s; }
+    .gal-item:hover img { transform:scale(1.06); }
+    .gal-overlay {
+      position:absolute;inset:0;
+      background:linear-gradient(to top,rgba(0,0,0,.8) 0%,transparent 60%);
+      display:flex;flex-direction:column;justify-content:flex-end;
+      padding:1rem;
+      opacity:0;transition:opacity .3s;
+    }
+    .gal-item:hover .gal-overlay { opacity:1; }
+    .gal-title { font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.9rem;color:#fff;margin-bottom:.25rem; }
+    .gal-cat { font-size:.72rem;color:rgba(255,255,255,.6); }
+    .gal-zoom { position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);background:rgba(0,212,255,.9);border-radius:50%;width:44px;height:44px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.2rem;transition:transform .3s cubic-bezier(.34,1.56,.64,1); }
+    .gal-item:hover .gal-zoom { transform:translate(-50%,-50%) scale(1); }
+
+    /* Lightbox */
+    .lightbox { position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.97);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s; }
+    .lightbox.open { opacity:1;pointer-events:all; }
+    .lb-img { max-width:90vw;max-height:85vh;border-radius:var(--radius);border:1px solid var(--border);object-fit:contain; }
+    .lb-close { position:absolute;top:20px;right:20px;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:1.4rem;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s; }
+    .lb-close:hover { background:var(--accent); }
+    .lb-nav { position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:1.3rem;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s; }
+    .lb-nav:hover { background:var(--primary);color:#000; }
+    .lb-prev { left:20px; }
+    .lb-next { right:20px; }
+    .lb-info { position:absolute;bottom:20px;left:50%;transform:translateX(-50%);text-align:center;color:#fff; }
+    .lb-title { font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1rem; }
+    .lb-counter { font-size:.78rem;color:rgba(255,255,255,.5);margin-top:.25rem; }
+  </style>
+</head>
+<body>
+  <div id="loader"><div class="loader-logo">DJ SIX</div><div class="loader-bar-track"><div class="loader-bar"></div></div></div>
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-logo">DJ SIX</a>
+      <div class="nav-links" id="nav-links">
+        <a href="../index.html">Home</a><a href="about.html">About</a><a href="mixtapes.html">Mixtapes</a><a href="videos.html">Videos</a><a href="events.html">Events</a>
+        <a href="gallery.html" class="active">Gallery</a>
+        <a href="testimonials.html">Testimonials</a><a href="booking.html">Booking</a><a href="contact.html">Contact</a>
+        <a href="booking.html" class="btn btn-primary btn-sm">Book Now</a>
+      </div>
+      <div class="nav-actions"><button class="theme-btn" id="theme-toggle" onclick="toggleTheme()">☀️</button><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div>
+    </div>
+  </nav>
+
+  <section class="page-hero"><canvas id="particles" class="particles-canvas"></canvas><div class="container"><div class="page-hero-title">Gallery</div><div class="breadcrumb"><a href="../index.html">Home</a><span>/</span><span>Gallery</span></div></div></section>
+  <div class="section-divider"></div>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-title" data-aos="fade-up">Event Gallery</div>
+      <p class="section-subtitle" data-aos="fade-up">Moments from world-class performances</p>
+      <div class="tabs" id="gal-tabs" data-aos="fade-up">
+        <button class="tab-btn active" data-cat="all">All</button>
+        <button class="tab-btn" data-cat="weddings">Weddings</button>
+        <button class="tab-btn" data-cat="clubs">Clubs</button>
+        <button class="tab-btn" data-cat="birthdays">Birthdays</button>
+        <button class="tab-btn" data-cat="concerts">Concerts</button>
+        <button class="tab-btn" data-cat="corporate">Corporate</button>
+      </div>
+      <div class="gallery-masonry" id="gallery-grid"></div>
+      <div id="gal-empty" class="empty-state" style="display:none"><p>No images in this category yet.</p></div>
+      <div style="text-align:center;margin-top:2.5rem" id="load-more-wrap">
+        <button class="btn btn-secondary" id="load-more-btn">Load More Photos</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <button class="lb-close" id="lb-close">✕</button>
+    <button class="lb-nav lb-prev" id="lb-prev">‹</button>
+    <img class="lb-img" id="lb-img" src="" alt="">
+    <button class="lb-nav lb-next" id="lb-next">›</button>
+    <div class="lb-info"><div class="lb-title" id="lb-title"></div><div class="lb-counter" id="lb-counter"></div></div>
+  </div>
+
+  <footer class="footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><div class="nav-logo" style="font-size:1.8rem">DJ SIX</div><p>International professional DJ.</p></div><div><div class="footer-heading">Navigate</div><div class="footer-links"><a href="../index.html">Home</a><a href="mixtapes.html">Mixtapes</a><a href="booking.html">Booking</a><a href="contact.html">Contact</a></div></div><div><div class="footer-heading">Contact</div><div class="footer-links"><a href="tel:+234000000000">📞 +234 000 000 0000</a><a href="mailto:booking@djsix.com">✉️ booking@djsix.com</a></div></div></div><div class="footer-bottom"><p>© 2025 DJ SIX. All rights reserved.</p></div></div></footer>
+  <button id="back-to-top"><svg viewBox="0 0 24 24"><path d="M12 4l-8 8h5v8h6v-8h5z"/></svg></button>
+  <a href="https://wa.me/234000000000" class="whatsapp-float" target="_blank"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+  <script src="../js/firebase-config.js"></script><script src="../js/components.js"></script><script src="../js/music-player.js"></script>
+  <script>
+    const seeds = ['dj1','dj2','dj3','dj4','dj5','dj6','dj7','dj8','dj9','dj10','dj11','dj12','dj13','dj14','dj15','dj16','dj17','dj18'];
+    const cats = ['weddings','clubs','birthdays','concerts','corporate','clubs','weddings','concerts','birthdays','corporate','clubs','weddings','concerts','clubs','birthdays','corporate','weddings','clubs'];
+    const titles = ['Wedding Bliss','Club Vibes Night','Birthday Bash','Concert Energy','Corporate Night','VIP Lounge Set','Reception Dance','Festival Crowd','Sweet 16 Party','Gala Night','Friday Night','Wedding Reception','Live Stage','DJ Booth Session','Birthday Party','Award Night','Traditional Wedding','After Party'];
+    const DEMO_GALLERY = seeds.map((s,i) => ({
+      id:`g${i+1}`, title:titles[i], image:`https://picsum.photos/seed/${s}/400/${300+Math.floor(Math.random()*200)}`, category:cats[i], description:''
+    }));
+
+    let allGallery=[], currentCat='all', displayed=0, batchSize=12;
+    let lightboxItems=[], lbIndex=0;
+
+    function galItem(item, idx) {
+      return `<div class="gal-item" data-cat="${item.category}" data-idx="${idx}" onclick="openLightbox(${idx})">
+        <img src="${item.image}" alt="${item.title}" loading="lazy">
+        <div class="gal-overlay"><div class="gal-title">${item.title}</div><div class="gal-cat">${item.category}</div></div>
+        <div class="gal-zoom">🔍</div>
+      </div>`;
+    }
+
+    function getFiltered() {
+      return currentCat==='all' ? allGallery : allGallery.filter(g=>g.category===currentCat);
+    }
+
+    function renderGallery(append=false) {
+      const grid = document.getElementById('gallery-grid');
+      const empty = document.getElementById('gal-empty');
+      const filtered = getFiltered();
+      lightboxItems = filtered;
+      if (!filtered.length) { grid.innerHTML=''; empty.style.display='block'; document.getElementById('load-more-wrap').style.display='none'; return; }
+      empty.style.display='none';
+      const slice = filtered.slice(0, displayed);
+      if (!append) grid.innerHTML = '';
+      slice.slice(append ? displayed-batchSize : 0).forEach((item,i)=>{
+        const div = document.createElement('div');
+        div.innerHTML = galItem(item, filtered.indexOf(item));
+        grid.appendChild(div.firstElementChild);
+      });
+      document.getElementById('load-more-wrap').style.display = displayed >= filtered.length ? 'none' : 'block';
+    }
+
+    function openLightbox(idx) {
+      lbIndex = idx;
+      const lb = document.getElementById('lightbox');
+      lb.classList.add('open');
+      updateLightbox();
+    }
+
+    function updateLightbox() {
+      const item = lightboxItems[lbIndex];
+      if (!item) return;
+      document.getElementById('lb-img').src = item.image;
+      document.getElementById('lb-title').textContent = item.title;
+      document.getElementById('lb-counter').textContent = `${lbIndex+1} / ${lightboxItems.length}`;
+    }
+
+    document.getElementById('lb-close').addEventListener('click', ()=>document.getElementById('lightbox').classList.remove('open'));
+    document.getElementById('lb-prev').addEventListener('click', ()=>{ lbIndex=(lbIndex-1+lightboxItems.length)%lightboxItems.length; updateLightbox(); });
+    document.getElementById('lb-next').addEventListener('click', ()=>{ lbIndex=(lbIndex+1)%lightboxItems.length; updateLightbox(); });
+    document.getElementById('lightbox').addEventListener('click', e=>{ if(e.target.id==='lightbox') document.getElementById('lightbox').classList.remove('open'); });
+    document.addEventListener('keydown', e=>{ if(e.key==='Escape') document.getElementById('lightbox').classList.remove('open'); if(e.key==='ArrowLeft'){lbIndex=(lbIndex-1+lightboxItems.length)%lightboxItems.length;updateLightbox();} if(e.key==='ArrowRight'){lbIndex=(lbIndex+1)%lightboxItems.length;updateLightbox();} });
+
+    document.getElementById('load-more-btn').addEventListener('click', ()=>{ displayed+=batchSize; renderGallery(true); });
+
+    document.getElementById('gal-tabs').addEventListener('click', e=>{
+      const btn=e.target.closest('.tab-btn');if(!btn)return;
+      document.querySelectorAll('#gal-tabs .tab-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');currentCat=btn.dataset.cat;displayed=batchSize;renderGallery();
+    });
+
+    async function loadGallery() {
+      allGallery=DEMO_GALLERY; displayed=batchSize; renderGallery();
+      try { if(typeof db!=='undefined'){const s=await db.collection('gallery').orderBy('createdAt','desc').get();if(!s.empty){allGallery=s.docs.map(d=>({id:d.id,...d.data()}));displayed=batchSize;renderGallery();}}} catch(e){}
+    }
+
+    document.addEventListener('DOMContentLoaded',()=>{ initParticles('particles'); loadGallery(); });
+  </script>
+</body>
+</html>

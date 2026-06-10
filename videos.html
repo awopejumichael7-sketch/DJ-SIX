@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Videos – DJ SIX</title>
+  <link rel="stylesheet" href="../css/global.css"><link rel="stylesheet" href="../css/music-player.css">
+  <style>
+    .page-hero { min-height:35vh;display:flex;align-items:center;padding-top:100px;background:radial-gradient(ellipse at 70% 50%,rgba(255,20,147,.15) 0%,transparent 60%),var(--bg);position:relative;overflow:hidden; }
+    .page-hero-title { font-family:'Orbitron',sans-serif;font-size:clamp(2rem,6vw,4rem);font-weight:900;background:linear-gradient(135deg,var(--primary),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
+    .breadcrumb { display:flex;align-items:center;gap:.5rem;color:var(--text3);font-size:.875rem;margin-top:.75rem; }
+    .breadcrumb a { color:var(--primary); }
+    .video-card { background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:var(--transition);backdrop-filter:blur(10px); }
+    .video-card:hover { transform:translateY(-5px);border-color:rgba(255,20,147,.4);box-shadow:0 20px 50px rgba(255,20,147,.1); }
+    .video-card-body { padding:1.25rem; }
+    .video-title { font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.05rem;margin-bottom:.5rem; }
+  </style>
+</head>
+<body>
+  <div id="loader"><div class="loader-logo">DJ SIX</div><div class="loader-bar-track"><div class="loader-bar"></div></div></div>
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-logo">DJ SIX</a>
+      <div class="nav-links" id="nav-links">
+        <a href="../index.html">Home</a><a href="about.html">About</a><a href="mixtapes.html">Mixtapes</a>
+        <a href="videos.html" class="active">Videos</a>
+        <a href="events.html">Events</a><a href="gallery.html">Gallery</a><a href="testimonials.html">Testimonials</a><a href="booking.html">Booking</a><a href="contact.html">Contact</a>
+        <a href="booking.html" class="btn btn-primary btn-sm">Book Now</a>
+      </div>
+      <div class="nav-actions"><button class="theme-btn" id="theme-toggle" onclick="toggleTheme()">☀️</button><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div>
+    </div>
+  </nav>
+  <section class="page-hero"><canvas id="particles" class="particles-canvas"></canvas><div class="container"><div class="page-hero-title">Videos</div><div class="breadcrumb"><a href="../index.html">Home</a><span>/</span><span>Videos</span></div></div></section>
+  <div class="section-divider"></div>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-title" data-aos="fade-up">Watch DJ SIX Live</div>
+      <p class="section-subtitle" data-aos="fade-up">Featured Mixes · Club Sessions · Live Performances · Events</p>
+      <div class="tabs" id="vid-tabs" data-aos="fade-up">
+        <button class="tab-btn active" data-cat="all">All</button>
+        <button class="tab-btn" data-cat="featured">Featured</button>
+        <button class="tab-btn" data-cat="club">Club Sessions</button>
+        <button class="tab-btn" data-cat="live">Live Performances</button>
+        <button class="tab-btn" data-cat="wedding">Wedding Events</button>
+        <button class="tab-btn" data-cat="highlights">Event Highlights</button>
+      </div>
+      <div class="grid-2" id="videos-grid">
+        <div class="video-card" data-aos="fade-up"><div class="video-wrapper"><iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="DJ SIX Mix" allowfullscreen loading="lazy"></iframe></div><div class="video-card-body"><div class="video-title">Club Night 2024 – Best Moments</div><span class="badge badge-primary">Featured</span></div></div>
+        <div class="video-card" data-aos="fade-up"><div class="video-wrapper"><iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="DJ SIX Wedding" allowfullscreen loading="lazy"></iframe></div><div class="video-card-body"><div class="video-title">Wedding Season Highlights</div><span class="badge badge-secondary">Wedding</span></div></div>
+        <div class="video-card" data-aos="fade-up"><div class="video-wrapper"><iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="DJ SIX Live" allowfullscreen loading="lazy"></iframe></div><div class="video-card-body"><div class="video-title">Festival Live Set – Lagos 2024</div><span class="badge badge-accent">Live</span></div></div>
+        <div class="video-card" data-aos="fade-up"><div class="video-wrapper"><iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="DJ SIX Club" allowfullscreen loading="lazy"></iframe></div><div class="video-card-body"><div class="video-title">Afrobeats Club Mix Vol. 5</div><span class="badge badge-gold">Club</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><div class="nav-logo" style="font-size:1.8rem">DJ SIX</div><p>International professional DJ.</p></div><div><div class="footer-heading">Navigate</div><div class="footer-links"><a href="../index.html">Home</a><a href="mixtapes.html">Mixtapes</a><a href="booking.html">Booking</a><a href="contact.html">Contact</a></div></div><div><div class="footer-heading">Contact</div><div class="footer-links"><a href="tel:+234000000000">📞 +234 000 000 0000</a><a href="mailto:booking@djsix.com">✉️ booking@djsix.com</a></div></div></div><div class="footer-bottom"><p>© 2025 DJ SIX. All rights reserved.</p></div></div></footer>
+  <button id="back-to-top"><svg viewBox="0 0 24 24"><path d="M12 4l-8 8h5v8h6v-8h5z"/></svg></button>
+  <a href="https://wa.me/234000000000" class="whatsapp-float" target="_blank"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+  <script src="../js/firebase-config.js"></script><script src="../js/components.js"></script><script src="../js/music-player.js"></script>
+  <script>
+    const DEMO_VIDEOS = [
+      { id:'v1', title:'Club Night 2024 – Best Moments', youtubeLink:'https://www.youtube.com/embed/dQw4w9WgXcQ', category:'featured' },
+      { id:'v2', title:'Wedding Season Highlights', youtubeLink:'https://www.youtube.com/embed/dQw4w9WgXcQ', category:'wedding' },
+      { id:'v3', title:'Festival Live Set – Lagos 2024', youtubeLink:'https://www.youtube.com/embed/dQw4w9WgXcQ', category:'live' },
+      { id:'v4', title:'Afrobeats Club Mix Vol. 5', youtubeLink:'https://www.youtube.com/embed/dQw4w9WgXcQ', category:'club' },
+      { id:'v5', title:'Corporate Gala 2023', youtubeLink:'https://www.youtube.com/embed/dQw4w9WgXcQ', category:'highlights' },
+      { id:'v6', title:'Birthday Bash Mix', youtubeLink:'https://www.youtube.com/embed/dQw4w9WgXcQ', category:'highlights' },
+    ];
+    let allVideos = [], currentCat = 'all';
+    const catBadge = { featured:'badge-primary', club:'badge-gold', live:'badge-accent', wedding:'badge-secondary', highlights:'badge-primary' };
+    function videoCard(v) {
+      return `<div class="video-card" data-cat="${v.category}" data-aos="fade-up">
+        <div class="video-wrapper"><iframe src="${v.youtubeLink}" title="${v.title}" allowfullscreen loading="lazy"></iframe></div>
+        <div class="video-card-body"><div class="video-title">${v.title}</div><span class="badge ${catBadge[v.category]||'badge-primary'}">${v.category||'Video'}</span></div>
+      </div>`;
+    }
+    function renderVideos(data) {
+      const grid = document.getElementById('videos-grid');
+      const filtered = currentCat === 'all' ? data : data.filter(v => v.category === currentCat);
+      grid.innerHTML = filtered.length ? filtered.map(videoCard).join('') : '<div class="empty-state" style="grid-column:1/-1"><p>No videos in this category yet.</p></div>';
+      initScrollAnimations();
+    }
+    async function loadVideos() {
+      allVideos = DEMO_VIDEOS; renderVideos(allVideos);
+      try { if(typeof db!=='undefined'){const s=await db.collection('videos').orderBy('createdAt','desc').get();if(!s.empty){allVideos=s.docs.map(d=>({id:d.id,...d.data()}));renderVideos(allVideos);}}} catch(e){}
+    }
+    document.getElementById('vid-tabs').addEventListener('click', e => {
+      const btn = e.target.closest('.tab-btn'); if(!btn) return;
+      document.querySelectorAll('#vid-tabs .tab-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active'); currentCat = btn.dataset.cat; renderVideos(allVideos);
+    });
+    document.addEventListener('DOMContentLoaded', () => { initParticles('particles'); loadVideos(); });
+  </script>
+</body>
+</html>

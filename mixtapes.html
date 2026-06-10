@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mixtapes – DJ SIX</title>
+  <meta name="description" content="Stream and download the latest mixtapes from DJ SIX. Afrobeats, Amapiano, Hip-Hop and more.">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/music-player.css">
+  <style>
+    .page-hero { min-height: 35vh; display: flex; align-items: center; padding-top: 100px; background: radial-gradient(ellipse at 70% 50%, rgba(0,212,255,0.15) 0%, transparent 60%), var(--bg); position: relative; overflow: hidden; }
+    .page-hero-title { font-family: 'Orbitron', sans-serif; font-size: clamp(2rem, 6vw, 4rem); font-weight: 900; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .breadcrumb { display: flex; align-items: center; gap: .5rem; color: var(--text3); font-size: .875rem; margin-top: .75rem; }
+    .breadcrumb a { color: var(--primary); }
+
+    .mixtape-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+
+    .mix-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: var(--transition);
+      backdrop-filter: blur(10px);
+    }
+    .mix-card:hover { transform: translateY(-6px); border-color: rgba(0,212,255,.4); box-shadow: 0 20px 60px rgba(0,212,255,.12); }
+
+    .mix-cover-wrap { position: relative; aspect-ratio: 1; overflow: hidden; }
+    .mix-cover { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+    .mix-card:hover .mix-cover { transform: scale(1.05); }
+
+    .mix-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,.9) 0%, rgba(0,0,0,.3) 50%, transparent 100%);
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 1.25rem;
+      opacity: 0; transition: opacity .3s;
+    }
+    .mix-card:hover .mix-overlay { opacity: 1; }
+    .mix-overlay-btns { display: flex; gap: .5rem; flex-wrap: wrap; }
+
+    .mix-play-btn {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0);
+      width: 56px; height: 56px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; color: #fff;
+      box-shadow: 0 0 30px rgba(0,212,255,.5);
+      transition: transform .3s cubic-bezier(.34,1.56,.64,1);
+      cursor: pointer;
+    }
+    .mix-card:hover .mix-play-btn { transform: translate(-50%,-50%) scale(1); }
+
+    .mix-body { padding: 1.25rem; }
+    .mix-title { font-family: 'Rajdhani',sans-serif; font-weight: 700; font-size: 1.1rem; margin-bottom: .35rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .mix-desc { font-size: .82rem; color: var(--text2); margin-bottom: .75rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .mix-meta { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .5rem; }
+    .mix-date { font-size: .75rem; color: var(--text3); }
+    .mix-actions { display: flex; gap: .4rem; margin-top: .75rem; }
+
+    /* Download count badge */
+    .dl-count { display: flex; align-items: center; gap: 4px; font-size: .75rem; color: var(--text3); }
+  </style>
+</head>
+<body>
+  <div id="loader"><div class="loader-logo">DJ SIX</div><div class="loader-bar-track"><div class="loader-bar"></div></div></div>
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-logo">DJ SIX</a>
+      <div class="nav-links" id="nav-links">
+        <a href="../index.html">Home</a><a href="about.html">About</a>
+        <a href="mixtapes.html" class="active">Mixtapes</a>
+        <a href="videos.html">Videos</a><a href="events.html">Events</a>
+        <a href="gallery.html">Gallery</a><a href="testimonials.html">Testimonials</a>
+        <a href="booking.html">Booking</a><a href="contact.html">Contact</a>
+        <a href="booking.html" class="btn btn-primary btn-sm">Book Now</a>
+      </div>
+      <div class="nav-actions">
+        <button class="theme-btn" id="theme-toggle" onclick="toggleTheme()">☀️</button>
+        <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+      </div>
+    </div>
+  </nav>
+
+  <section class="page-hero">
+    <canvas id="particles" class="particles-canvas"></canvas>
+    <div class="container">
+      <div class="page-hero-title">Mixtapes</div>
+      <div class="breadcrumb"><a href="../index.html">Home</a><span>/</span><span>Mixtapes</span></div>
+    </div>
+  </section>
+  <div class="section-divider"></div>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-title" data-aos="fade-up">All Mixtapes</div>
+      <p class="section-subtitle" data-aos="fade-up">Stream · Download · Share</p>
+
+      <!-- Filters -->
+      <div class="tabs" id="mix-tabs" data-aos="fade-up">
+        <button class="tab-btn active" data-filter="all">All</button>
+        <button class="tab-btn" data-filter="afrobeats">Afrobeats</button>
+        <button class="tab-btn" data-filter="amapiano">Amapiano</button>
+        <button class="tab-btn" data-filter="hiphop">Hip-Hop</button>
+        <button class="tab-btn" data-filter="house">House</button>
+        <button class="tab-btn" data-filter="rnb">R&B</button>
+      </div>
+
+      <div class="mixtape-grid" id="mixtapes-grid">
+        <!-- Skeletons -->
+        <div class="mix-card"><div class="skeleton" style="aspect-ratio:1"></div><div class="mix-body"><div class="skeleton" style="height:18px;margin-bottom:8px"></div><div class="skeleton" style="height:13px;width:70%;margin-bottom:8px"></div><div class="skeleton" style="height:13px;width:50%"></div></div></div>
+        <div class="mix-card"><div class="skeleton" style="aspect-ratio:1"></div><div class="mix-body"><div class="skeleton" style="height:18px;margin-bottom:8px"></div><div class="skeleton" style="height:13px;width:70%;margin-bottom:8px"></div><div class="skeleton" style="height:13px;width:50%"></div></div></div>
+        <div class="mix-card"><div class="skeleton" style="aspect-ratio:1"></div><div class="mix-body"><div class="skeleton" style="height:18px;margin-bottom:8px"></div><div class="skeleton" style="height:13px;width:70%;margin-bottom:8px"></div><div class="skeleton" style="height:13px;width:50%"></div></div></div>
+      </div>
+
+      <div id="mix-empty" class="empty-state" style="display:none">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19V6l12-3v13M9 19c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm12-3c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2z"/></svg>
+        <p>No mixtapes found. Check back soon!</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand"><div class="nav-logo" style="font-size:1.8rem">DJ SIX</div><p>International professional DJ delivering world-class entertainment.</p><div class="footer-social"><a href="#" class="social-btn">📸</a><a href="#" class="social-btn">▶</a><a href="#" class="social-btn">📘</a></div></div>
+        <div><div class="footer-heading">Navigate</div><div class="footer-links"><a href="../index.html">Home</a><a href="about.html">About</a><a href="mixtapes.html">Mixtapes</a><a href="videos.html">Videos</a></div></div>
+        <div><div class="footer-heading">More</div><div class="footer-links"><a href="events.html">Events</a><a href="gallery.html">Gallery</a><a href="booking.html">Booking</a><a href="contact.html">Contact</a></div></div>
+        <div><div class="footer-heading">Contact</div><div class="footer-links"><a href="tel:+234000000000">📞 +234 000 000 0000</a><a href="mailto:booking@djsix.com">✉️ booking@djsix.com</a></div></div>
+      </div>
+      <div class="footer-bottom"><p>© 2025 DJ SIX. All rights reserved.</p></div>
+    </div>
+  </footer>
+  <button id="back-to-top"><svg viewBox="0 0 24 24"><path d="M12 4l-8 8h5v8h6v-8h5z"/></svg></button>
+  <a href="https://wa.me/234000000000" class="whatsapp-float" target="_blank">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+  <script src="../js/firebase-config.js"></script>
+  <script src="../js/components.js"></script>
+  <script src="../js/music-player.js"></script>
+  <script>
+    const DEMO_MIXTAPES = [
+      { id:'m1', title:'AfroFusion Vol. 1', description:'The hottest Afrobeats tracks of 2024 mixed live in Lagos.', image:'https://picsum.photos/seed/afrofusion1/400/400', audio:'', releaseDate:'2024-01-15', duration:'45:22', downloads:1240, genre:'afrobeats' },
+      { id:'m2', title:'Club Bangers Mix', description:'Non-stop club anthems to keep the dance floor alive.', image:'https://picsum.photos/seed/clubbang/400/400', audio:'', releaseDate:'2024-03-20', duration:'60:00', downloads:980, genre:'house' },
+      { id:'m3', title:'Wedding Vibes', description:'Romantic & celebratory tracks for the perfect wedding.', image:'https://picsum.photos/seed/weddingv/400/400', audio:'', releaseDate:'2024-06-01', duration:'50:10', downloads:754, genre:'rnb' },
+      { id:'m4', title:'Amapiano Heat', description:'Smooth amapiano grooves straight from South Africa.', image:'https://picsum.photos/seed/amapiano1/400/400', audio:'', releaseDate:'2024-07-11', duration:'55:30', downloads:1890, genre:'amapiano' },
+      { id:'m5', title:'Street Anthems Vol. 3', description:'Lagos street hits and hip-hop bangers.', image:'https://picsum.photos/seed/streetant/400/400', audio:'', releaseDate:'2024-09-05', duration:'48:00', downloads:620, genre:'hiphop' },
+      { id:'m6', title:'Midnight Groove', description:'Late night R&B and neo-soul for the movers.', image:'https://picsum.photos/seed/midnightg/400/400', audio:'', releaseDate:'2024-10-20', duration:'52:40', downloads:430, genre:'rnb' },
+    ];
+
+    let allMixtapes = [];
+    let currentFilter = 'all';
+
+    function mixtapeCard(m) {
+      const date = m.releaseDate ? new Date(m.releaseDate).toLocaleDateString('en-NG', { year:'numeric', month:'short', day:'numeric' }) : '';
+      return `
+      <div class="mix-card" data-genre="${m.genre||'all'}" data-aos="fade-up">
+        <div class="mix-cover-wrap">
+          <img src="${m.image}" alt="${m.title}" class="mix-cover" loading="lazy">
+          <div class="mix-play-btn" onclick="playMixtape('${m.id}','${m.title}','${m.audio||''}','${m.image}')">▶</div>
+          <div class="mix-overlay">
+            <div class="mix-overlay-btns">
+              ${m.audio ? `<a href="${m.audio}" class="btn btn-primary btn-sm" target="_blank">🎵 Listen</a>` : `<button class="btn btn-primary btn-sm" onclick="playMixtape('${m.id}','${m.title}','${m.audio||''}','${m.image}')">▶ Play</button>`}
+              ${m.audio ? `<a href="${m.audio}" class="btn btn-secondary btn-sm" download onclick="incrementDownload('${m.id}')">⬇ Download</a>` : ''}
+              <button class="btn btn-accent btn-sm" onclick="shareMixtape('${m.title}')">📤 Share</button>
+            </div>
+          </div>
+        </div>
+        <div class="mix-body">
+          <div class="mix-title">${m.title}</div>
+          <div class="mix-desc">${m.description||''}</div>
+          <div class="mix-meta">
+            <span class="badge badge-primary">${m.duration||''}</span>
+            <span class="mix-date">${date}</span>
+          </div>
+          <div class="mix-actions">
+            ${m.audio ? `<a href="${m.audio}" class="btn btn-primary btn-sm" target="_blank">🎵 Listen</a>` : `<button class="btn btn-primary btn-sm" onclick="playMixtape('${m.id}','${m.title}','${m.audio||''}','${m.image}')">▶ Play</button>`}
+            ${m.audio ? `<a href="${m.audio}" class="btn btn-secondary btn-sm" download onclick="incrementDownload('${m.id}')">⬇ Download</a>` : ''}
+            <button class="btn btn-sm" style="border:1px solid var(--border);color:var(--text2)" onclick="shareMixtape('${m.title}')">📤</button>
+            <span class="dl-count" style="margin-left:auto">⬇ ${(m.downloads||0).toLocaleString()}</span>
+          </div>
+        </div>
+      </div>`;
+    }
+
+    function renderMixtapes(data) {
+      const grid = document.getElementById('mixtapes-grid');
+      const empty = document.getElementById('mix-empty');
+      const filtered = currentFilter === 'all' ? data : data.filter(m => m.genre === currentFilter);
+      if (!filtered.length) { grid.innerHTML = ''; empty.style.display='block'; return; }
+      empty.style.display = 'none';
+      grid.innerHTML = filtered.map(mixtapeCard).join('');
+      initScrollAnimations();
+    }
+
+    async function loadMixtapes() {
+      allMixtapes = DEMO_MIXTAPES;
+      renderMixtapes(allMixtapes);
+      try {
+        if (typeof db !== 'undefined') {
+          const snap = await db.collection('mixtapes').orderBy('createdAt','desc').get();
+          if (!snap.empty) {
+            allMixtapes = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            renderMixtapes(allMixtapes);
+          }
+        }
+      } catch(e) {}
+    }
+
+    function playMixtape(id, title, audioUrl, cover) {
+      if (window.musicPlayer) {
+        if (audioUrl) {
+          window.musicPlayer.songs.unshift({ id, title, artist:'DJ SIX', cover, audioUrl, duration:'' });
+          window.musicPlayer.loadTrack(0);
+          window.musicPlayer.isPlaying = false;
+          window.musicPlayer.togglePlay();
+        } else {
+          showToast('Audio coming soon! Check back later.', 'warning');
+        }
+      }
+    }
+
+    async function incrementDownload(id) {
+      try {
+        if (typeof db !== 'undefined') {
+          await db.collection('mixtapes').doc(id).update({ downloads: firebase.firestore.FieldValue.increment(1) });
+        }
+      } catch(e){}
+    }
+
+    function shareMixtape(title) {
+      if (navigator.share) {
+        navigator.share({ title:`DJ SIX – ${title}`, url: window.location.href });
+      } else {
+        navigator.clipboard.writeText(window.location.href);
+        showToast('Link copied to clipboard!');
+      }
+    }
+
+    // Filter tabs
+    document.getElementById('mix-tabs').addEventListener('click', e => {
+      const btn = e.target.closest('.tab-btn');
+      if (!btn) return;
+      document.querySelectorAll('#mix-tabs .tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentFilter = btn.dataset.filter;
+      renderMixtapes(allMixtapes);
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initParticles('particles');
+      loadMixtapes();
+    });
+  </script>
+</body>
+</html>

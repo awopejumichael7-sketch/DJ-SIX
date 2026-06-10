@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Testimonials – DJ SIX</title>
+  <link rel="stylesheet" href="../css/global.css"><link rel="stylesheet" href="../css/music-player.css">
+  <style>
+    .page-hero { min-height:35vh;display:flex;align-items:center;padding-top:100px;background:radial-gradient(ellipse at 40% 50%,rgba(255,215,0,.12) 0%,transparent 60%),var(--bg);position:relative;overflow:hidden; }
+    .page-hero-title { font-family:'Orbitron',sans-serif;font-size:clamp(2rem,6vw,4rem);font-weight:900;background:linear-gradient(135deg,var(--gold),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
+    .breadcrumb{display:flex;align-items:center;gap:.5rem;color:var(--text3);font-size:.875rem;margin-top:.75rem;} .breadcrumb a{color:var(--primary);}
+    .testi-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.5rem; }
+    .rating-filter { display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:2rem; }
+    .rating-btn { padding:.5rem 1.2rem;border-radius:50px;background:var(--surface);border:1px solid var(--border);color:var(--text2);font-family:'Rajdhani',sans-serif;font-weight:600;font-size:.9rem;cursor:pointer;transition:var(--transition); }
+    .rating-btn.active,.rating-btn:hover { background:linear-gradient(135deg,var(--gold),var(--secondary));border-color:transparent;color:#fff; }
+    .overall-rating { background:linear-gradient(135deg,rgba(255,215,0,.08),rgba(138,43,226,.08));border:1px solid rgba(255,215,0,.15);border-radius:var(--radius-lg);padding:2.5rem;text-align:center;margin-bottom:3rem; }
+    .overall-num { font-family:'Orbitron',sans-serif;font-size:4rem;font-weight:900;color:var(--gold); }
+    .overall-stars { font-size:2rem;color:var(--gold);letter-spacing:4px; }
+    .overall-count { color:var(--text3);margin-top:.5rem; }
+  </style>
+</head>
+<body>
+  <div id="loader"><div class="loader-logo">DJ SIX</div><div class="loader-bar-track"><div class="loader-bar"></div></div></div>
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-logo">DJ SIX</a>
+      <div class="nav-links" id="nav-links">
+        <a href="../index.html">Home</a><a href="about.html">About</a><a href="mixtapes.html">Mixtapes</a><a href="videos.html">Videos</a><a href="events.html">Events</a><a href="gallery.html">Gallery</a>
+        <a href="testimonials.html" class="active">Testimonials</a>
+        <a href="booking.html">Booking</a><a href="contact.html">Contact</a>
+        <a href="booking.html" class="btn btn-primary btn-sm">Book Now</a>
+      </div>
+      <div class="nav-actions"><button class="theme-btn" id="theme-toggle" onclick="toggleTheme()">☀️</button><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div>
+    </div>
+  </nav>
+  <section class="page-hero"><canvas id="particles" class="particles-canvas"></canvas><div class="container"><div class="page-hero-title">Testimonials</div><div class="breadcrumb"><a href="../index.html">Home</a><span>/</span><span>Testimonials</span></div></div></section>
+  <div class="section-divider"></div>
+  <section class="section">
+    <div class="container">
+      <div class="section-title" data-aos="fade-up">What Clients Say</div>
+      <p class="section-subtitle" data-aos="fade-up">Real reviews from real clients across Nigeria and beyond</p>
+      <div class="overall-rating" data-aos="zoom-in">
+        <div class="overall-num">4.9</div>
+        <div class="overall-stars">★★★★★</div>
+        <div class="overall-count">Based on 1,000+ reviews</div>
+      </div>
+      <div class="rating-filter" data-aos="fade-up">
+        <button class="rating-btn active" data-rating="all">All Reviews</button>
+        <button class="rating-btn" data-rating="5">★★★★★ 5 Stars</button>
+        <button class="rating-btn" data-rating="4">★★★★ 4 Stars</button>
+        <button class="rating-btn" data-rating="3">★★★ 3 Stars</button>
+      </div>
+      <div class="testi-grid" id="testi-grid">
+        <div class="testimonial-card glass" style="animation:fadeIn .6s"><div class="skeleton" style="height:80px;margin-bottom:12px"></div><div class="skeleton" style="height:14px;width:60%"></div></div>
+        <div class="testimonial-card glass"><div class="skeleton" style="height:80px;margin-bottom:12px"></div><div class="skeleton" style="height:14px;width:60%"></div></div>
+        <div class="testimonial-card glass"><div class="skeleton" style="height:80px;margin-bottom:12px"></div><div class="skeleton" style="height:14px;width:60%"></div></div>
+      </div>
+    </div>
+  </section>
+  <footer class="footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><div class="nav-logo" style="font-size:1.8rem">DJ SIX</div><p>International professional DJ.</p></div><div><div class="footer-heading">Navigate</div><div class="footer-links"><a href="../index.html">Home</a><a href="mixtapes.html">Mixtapes</a><a href="booking.html">Booking</a><a href="contact.html">Contact</a></div></div><div><div class="footer-heading">Contact</div><div class="footer-links"><a href="tel:+234000000000">📞 +234 000 000 0000</a><a href="mailto:booking@djsix.com">✉️ booking@djsix.com</a></div></div></div><div class="footer-bottom"><p>© 2025 DJ SIX. All rights reserved.</p></div></div></footer>
+  <button id="back-to-top"><svg viewBox="0 0 24 24"><path d="M12 4l-8 8h5v8h6v-8h5z"/></svg></button>
+  <a href="https://wa.me/234000000000" class="whatsapp-float" target="_blank"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+  <script src="../js/firebase-config.js"></script><script src="../js/components.js"></script><script src="../js/music-player.js"></script>
+  <script>
+    const DEMO_TESTI = [
+      { id:'t1', name:'Chioma Okafor', photo:'https://i.pravatar.cc/52?img=1', role:'Bride – Lagos', review:'DJ SIX absolutely killed it at our wedding! Every song was perfect, the crowd was on their feet all night. Best investment we made for our big day!', rating:5 },
+      { id:'t2', name:'Emeka Nwosu', photo:'https://i.pravatar.cc/52?img=3', role:'CEO – Abuja', review:'Best DJ in Lagos, period. He played our corporate event and had even the executives on the dance floor! Outstanding professionalism and music selection.', rating:5 },
+      { id:'t3', name:'Adaeze Williams', photo:'https://i.pravatar.cc/52?img=5', role:'Birthday – Port Harcourt', review:'Incredible energy, amazing music selection, and so professional. DJ SIX made my 30th birthday absolutely unforgettable!', rating:5 },
+      { id:'t4', name:'Babatunde Fashola', photo:'https://i.pravatar.cc/52?img=7', role:'Event Planner – Lagos', review:'I have worked with many DJs across Nigeria and internationally. DJ SIX is by far the most professional, versatile and crowd-reading DJ I have encountered.', rating:5 },
+      { id:'t5', name:'Ngozi Eze', photo:'https://i.pravatar.cc/52?img=9', role:'Bride – Enugu', review:'Our traditional wedding was elevated to another level by DJ SIX. He played the perfect mix of traditional and modern music. Highly recommend!', rating:5 },
+      { id:'t6', name:'Seun Adeleke', photo:'https://i.pravatar.cc/52?img=11', role:'Club Owner – Lagos', review:'DJ SIX has been our resident DJ for 3 years now. Our revenue increased by 40% since he started. He is a game-changer for any venue.', rating:5 },
+      { id:'t7', name:'Folake Coker', photo:'https://i.pravatar.cc/52?img=20', role:'Corporate Client – Lagos', review:'DJ SIX played our product launch and absolutely understood the vibe we wanted. Professional, punctual, and phenomenal. Will book again!', rating:4 },
+      { id:'t8', name:'Chukwuemeka Obi', photo:'https://i.pravatar.cc/52?img=15', role:'Festival Organizer', review:'We hired DJ SIX for our annual festival headlining set. He delivered beyond our expectations. Crowd of 10,000+ people were absolutely electrified.', rating:5 },
+      { id:'t9', name:'Amaka Okonkwo', photo:'https://i.pravatar.cc/52?img=25', role:'Birthday – Benin City', review:'My daughter\'s 18th birthday was magical because of DJ SIX. He knew exactly what the young crowd wanted and kept everyone dancing for 5 straight hours!', rating:5 },
+    ];
+    let allTesti=[], currentRating='all';
+    function starRating(r) { return '★'.repeat(r)+'☆'.repeat(5-r); }
+    function testiCard(t) {
+      return `<div class="testimonial-card glass" data-rating="${t.rating}" data-aos="fade-up">
+        <div class="testimonial-quote">"</div>
+        <p class="testimonial-text">${t.review}</p>
+        <div class="testimonial-author">
+          <img src="${t.photo}" alt="${t.name}" class="testimonial-avatar">
+          <div><div class="testimonial-name">${t.name}</div><div class="testimonial-role">${t.role||''}</div></div>
+          <div class="stars" style="margin-left:auto;color:var(--gold)">${starRating(t.rating)}</div>
+        </div>
+      </div>`;
+    }
+    function renderTesti(data) {
+      const grid = document.getElementById('testi-grid');
+      const filtered = currentRating==='all' ? data : data.filter(t=>String(t.rating)===currentRating);
+      grid.innerHTML = filtered.length ? filtered.map(testiCard).join('') : '<div class="empty-state" style="grid-column:1/-1"><p>No reviews for this rating.</p></div>';
+      initScrollAnimations();
+    }
+    async function loadTesti() {
+      allTesti=DEMO_TESTI; renderTesti(allTesti);
+      try { if(typeof db!=='undefined'){const s=await db.collection('testimonials').orderBy('createdAt','desc').get();if(!s.empty){allTesti=s.docs.map(d=>({id:d.id,...d.data()}));renderTesti(allTesti);}}} catch(e){}
+    }
+    document.querySelectorAll('.rating-btn').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        document.querySelectorAll('.rating-btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');currentRating=btn.dataset.rating;renderTesti(allTesti);
+      });
+    });
+    document.addEventListener('DOMContentLoaded',()=>{ initParticles('particles'); loadTesti(); });
+  </script>
+</body>
+</html>

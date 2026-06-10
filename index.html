@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DJ SIX – International Professional DJ | Lagos, Nigeria</title>
+  <meta name="description" content="DJ SIX – World-class professional DJ based in Lagos, Nigeria. Available for weddings, clubs, corporate events, concerts and more.">
+  <meta property="og:title" content="DJ SIX – International Professional DJ">
+  <meta property="og:description" content="World-class entertainment. Book DJ SIX for your next event.">
+  <meta property="og:type" content="website">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#00D4FF">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/music-player.css">
+  <style>
+    /* ── Home Page Specific ── */
+    .hero { padding-top: 80px; }
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+      min-height: calc(100vh - 80px);
+      padding: 4rem 0;
+    }
+    @media (max-width: 900px) {
+      .hero-inner { grid-template-columns: 1fr; text-align: center; }
+      .hero-btns { justify-content: center; }
+      .hero-stats { justify-content: center; }
+      .hero-image-wrapper { order: -1; }
+    }
+    .hero-image-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-image-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 2px solid;
+      animation: ring-rotate 8s linear infinite;
+    }
+    .ring-1 { width: 380px; height: 380px; border-color: rgba(0,212,255,0.2); animation-duration: 12s; }
+    .ring-2 { width: 440px; height: 440px; border-color: rgba(138,43,226,0.15); animation-duration: 18s; animation-direction: reverse; }
+    .ring-3 { width: 500px; height: 500px; border-color: rgba(255,20,147,0.1); animation-duration: 25s; }
+    @keyframes ring-rotate { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+    .hero-image {
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid rgba(0,212,255,0.4);
+      box-shadow: 0 0 60px rgba(0,212,255,0.3), 0 0 120px rgba(138,43,226,0.2);
+      position: relative;
+      z-index: 1;
+    }
+    @media (max-width: 600px) {
+      .hero-image { width: 220px; height: 220px; }
+      .ring-1 { width: 260px; height: 260px; }
+      .ring-2 { width: 300px; height: 300px; }
+      .ring-3 { width: 340px; height: 340px; }
+    }
+    .hero-equalizer { display: flex; align-items: flex-end; gap: 4px; height: 40px; margin-bottom: 1rem; }
+    @media (max-width: 900px) { .hero-equalizer { justify-content: center; } }
+
+    /* About Preview */
+    .about-preview-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    @media (max-width: 900px) { .about-preview-grid { grid-template-columns: 1fr; } }
+    .about-img {
+      border-radius: var(--radius-lg);
+      width: 100%;
+      aspect-ratio: 4/5;
+      object-fit: cover;
+      border: 2px solid rgba(138,43,226,0.3);
+      box-shadow: 0 30px 80px rgba(138,43,226,0.2);
+    }
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2rem; }
+    .stat-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      text-align: center;
+      backdrop-filter: blur(10px);
+    }
+    .stat-box-num {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .stat-box-label { font-size: 0.8rem; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; margin-top: 0.25rem; }
+
+    /* Mixtapes Preview */
+    .mixtape-card { position: relative; }
+    .mixtape-card-img { width: 100%; aspect-ratio: 1; object-fit: cover; }
+    .mixtape-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 60%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.5rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .mixtape-card:hover .mixtape-card-overlay { opacity: 1; }
+
+    /* Services */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
+    .service-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem 1.5rem;
+      text-align: center;
+      transition: var(--transition);
+      backdrop-filter: blur(10px);
+    }
+    .service-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(0,212,255,0.4);
+      box-shadow: 0 20px 50px rgba(0,212,255,0.1);
+    }
+    .service-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .service-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+    .service-desc { font-size: 0.875rem; color: var(--text2); line-height: 1.6; }
+
+    /* CTA Section */
+    .cta-section {
+      background: linear-gradient(135deg, rgba(0,212,255,0.08), rgba(138,43,226,0.08));
+      border: 1px solid rgba(0,212,255,0.15);
+      border-radius: var(--radius-lg);
+      padding: 4rem 3rem;
+      text-align: center;
+    }
+    .cta-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      font-weight: 900;
+      margin-bottom: 1rem;
+    }
+    .cta-subtitle { color: var(--text2); font-size: 1.1rem; margin-bottom: 2rem; max-width: 500px; margin-left: auto; margin-right: auto; }
+    .cta-btns { display: flex; justify-content: center; flex-wrap: wrap; gap: 1rem; }
+  </style>
+</head>
+<body>
+  <!-- Loader -->
+  <div id="loader">
+    <div class="loader-logo">DJ SIX</div>
+    <div class="loader-bar-track"><div class="loader-bar"></div></div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">DJ SIX</a>
+      <div class="nav-links" id="nav-links">
+        <a href="index.html" class="active">Home</a>
+        <a href="pages/about.html">About</a>
+        <a href="pages/mixtapes.html">Mixtapes</a>
+        <a href="pages/videos.html">Videos</a>
+        <a href="pages/events.html">Events</a>
+        <a href="pages/gallery.html">Gallery</a>
+        <a href="pages/testimonials.html">Testimonials</a>
+        <a href="pages/booking.html">Booking</a>
+        <a href="pages/contact.html">Contact</a>
+        <a href="pages/booking.html" class="btn btn-primary btn-sm">Book Now</a>
+      </div>
+      <div class="nav-actions">
+        <button class="theme-btn" id="theme-toggle" onclick="toggleTheme()" title="Toggle theme">☀️</button>
+        <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero" id="home">
+    <div class="hero-bg"></div>
+    <canvas class="particles-canvas" id="particles"></canvas>
+    <div class="container">
+      <div class="hero-inner">
+        <div class="hero-content" data-aos="fade-right">
+          <div class="hero-equalizer" id="hero-eq"></div>
+          <div class="hero-eyebrow">
+            <span class="hero-eyebrow-dot"></span>
+            International Professional DJ
+          </div>
+          <h1 class="hero-title">
+            <span class="hero-title-line1">THE ONE &</span>
+            <span class="hero-title-line2">ONLY SIX</span>
+          </h1>
+          <p class="hero-subtitle">
+            World-class DJ delivering electrifying performances across Nigeria and beyond. From sold-out festivals to intimate weddings — every set is a masterpiece.
+          </p>
+          <div class="hero-btns">
+            <a href="pages/booking.html" class="btn btn-primary btn-lg">🎤 Book DJ SIX</a>
+            <a href="pages/mixtapes.html" class="btn btn-secondary btn-lg">🎵 Listen To Mixtapes</a>
+            <a href="pages/videos.html" class="btn btn-accent btn-lg">▶ Watch Videos</a>
+            <a href="pages/events.html" class="btn btn-gold btn-lg">📅 View Events</a>
+          </div>
+          <div class="hero-stats">
+            <div>
+              <div class="hero-stat-value"><span data-count="500">0</span>+</div>
+              <div class="hero-stat-label">Events Performed</div>
+            </div>
+            <div>
+              <div class="hero-stat-value"><span data-count="15">0</span>+</div>
+              <div class="hero-stat-label">Years Experience</div>
+            </div>
+            <div>
+              <div class="hero-stat-value"><span data-count="20">0</span>+</div>
+              <div class="hero-stat-label">Countries</div>
+            </div>
+          </div>
+        </div>
+        <div class="hero-image-wrapper" data-aos="fade-left">
+          <div class="hero-image-ring ring-1"></div>
+          <div class="hero-image-ring ring-2"></div>
+          <div class="hero-image-ring ring-3"></div>
+          <img src="https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=400&h=400&fit=crop&crop=face" alt="DJ SIX" class="hero-image">
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="section-divider"></div>
+
+  <!-- About Preview -->
+  <section class="section" id="about-preview">
+    <div class="container">
+      <div class="about-preview-grid">
+        <div data-aos="fade-right">
+          <img src="https://images.unsplash.com/photo-1571266028243-e4733b0f0bb0?w=600&h=750&fit=crop" alt="DJ SIX performing" class="about-img">
+        </div>
+        <div data-aos="fade-left">
+          <span class="badge badge-primary" style="margin-bottom:1rem">About DJ SIX</span>
+          <h2 class="section-title" style="text-align:left">The Artist Behind The Decks</h2>
+          <p style="color:var(--text2);line-height:1.8;margin-bottom:1.5rem">
+            DJ SIX is one of Nigeria's most sought-after international DJs, renowned for his electrifying energy, impeccable music selection, and ability to read any crowd. With over 15 years of experience, he has performed at some of the world's most prestigious venues and events.
+          </p>
+          <p style="color:var(--text2);line-height:1.8;margin-bottom:2rem">
+            From high-energy club nights to luxurious wedding receptions, DJ SIX brings unparalleled professionalism and artistry to every performance. His unique blend of Afrobeats, Amapiano, Hip-Hop, and House music has made him a favorite among A-list celebrities and international brands.
+          </p>
+          <div class="stats-grid">
+            <div class="stat-box">
+              <div class="stat-box-num"><span data-count="500">0</span>+</div>
+              <div class="stat-box-label">Events Performed</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-box-num"><span data-count="1000">0</span>+</div>
+              <div class="stat-box-label">Happy Clients</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-box-num"><span data-count="50">0</span>+</div>
+              <div class="stat-box-label">Mixtapes Released</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-box-num"><span data-count="15">0</span>+</div>
+              <div class="stat-box-label">Years Experience</div>
+            </div>
+          </div>
+          <div style="margin-top:2rem">
+            <a href="pages/about.html" class="btn btn-primary">Learn More About DJ SIX</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="section-divider"></div>
+
+  <!-- Services -->
+  <section class="section" style="background: var(--bg2)">
+    <div class="container">
+      <div class="section-title" data-aos="fade-up">Services</div>
+      <p class="section-subtitle" data-aos="fade-up">World-class entertainment for every occasion</p>
+      <div class="services-grid">
+        <div class="service-card" data-aos="fade-up">
+          <span class="service-icon">💒</span>
+          <div class="service-title">Wedding DJ</div>
+          <p class="service-desc">Turn your special day into an unforgettable celebration with perfectly curated music for every moment.</p>
+        </div>
+        <div class="service-card" data-aos="fade-up">
+          <span class="service-icon">🎉</span>
+          <div class="service-title">Club Nights</div>
+          <p class="service-desc">High-energy club performances that keep the dance floor packed from open to close.</p>
+        </div>
+        <div class="service-card" data-aos="fade-up">
+          <span class="service-icon">🏢</span>
+          <div class="service-title">Corporate Events</div>
+          <p class="service-desc">Professional entertainment for brand launches, company parties, and corporate galas.</p>
+        </div>
+        <div class="service-card" data-aos="fade-up">
+          <span class="service-icon">🎂</span>
+          <div class="service-title">Birthday Parties</div>
+          <p class="service-desc">Make your birthday legendary with a DJ SIX performance that guests will talk about for years.</p>
+        </div>
+        <div class="service-card" data-aos="fade-up">
+          <span class="service-icon">🎤</span>
+          <div class="service-title">Concerts & Festivals</div>
+          <p class="service-desc">Festival-ready performances designed to electrify thousands of music lovers simultaneously.</p>
+        </div>
+        <div class="service-card" data-aos="fade-up">
+          <span class="service-icon">🌍</span>
+          <div class="service-title">International Tours</div>
+          <p class="service-desc">Available for international bookings across Africa, Europe, North America, and beyond.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="section-divider"></div>
+
+  <!-- Mixtapes Preview -->
+  <section class="section">
+    <div class="container">
+      <div class="section-title" data-aos="fade-up">Latest Mixtapes</div>
+      <p class="section-subtitle" data-aos="fade-up">Heat-seekers, soul stirrers, and floor-fillers</p>
+      <div class="grid-3" id="home-mixtapes">
+        <!-- Skeleton loaders -->
+        <div class="card"><div class="skeleton" style="aspect-ratio:1"></div><div class="card-body"><div class="skeleton" style="height:20px;margin-bottom:8px"></div><div class="skeleton" style="height:14px;width:60%"></div></div></div>
+        <div class="card"><div class="skeleton" style="aspect-ratio:1"></div><div class="card-body"><div class="skeleton" style="height:20px;margin-bottom:8px"></div><div class="skeleton" style="height:14px;width:60%"></div></div></div>
+        <div class="card"><div class="skeleton" style="aspect-ratio:1"></div><div class="card-body"><div class="skeleton" style="height:20px;margin-bottom:8px"></div><div class="skeleton" style="height:14px;width:60%"></div></div></div>
+      </div>
+      <div style="text-align:center;margin-top:2.5rem">
+        <a href="pages/mixtapes.html" class="btn btn-secondary">View All Mixtapes</a>
+      </div>
+    </div>
+  </section>
+  <div class="section-divider"></div>
+
+  <!-- Videos Preview -->
+  <section class="section" style="background:var(--bg2)">
+    <div class="container">
+      <div class="section-title" data-aos="fade-up">Watch DJ SIX Live</div>
+      <p class="section-subtitle" data-aos="fade-up">See the magic in action</p>
+      <div class="grid-2" id="home-videos">
+        <div class="card" data-aos="fade-up">
+          <div class="video-wrapper">
+            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="DJ SIX Live Mix" allowfullscreen loading="lazy"></iframe>
+          </div>
+          <div class="card-body">
+            <h3 style="font-family:'Rajdhani',sans-serif;font-weight:700;margin-bottom:0.5rem">Club Night 2024 – Best Moments</h3>
+            <span class="badge badge-primary">Featured</span>
+          </div>
+        </div>
+        <div class="card" data-aos="fade-up">
+          <div class="video-wrapper">
+            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="DJ SIX Wedding Mix" allowfullscreen loading="lazy"></iframe>
+          </div>
+          <div class="card-body">
+            <h3 style="font-family:'Rajdhani',sans-serif;font-weight:700;margin-bottom:0.5rem">Wedding Season Highlights</h3>
+            <span class="badge badge-secondary">Wedding</span>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:2.5rem">
+        <a href="pages/videos.html" class="btn btn-accent">View All Videos</a>
+      </div>
+    </div>
+  </section>
+  <div class="section-divider"></div>
+
+  <!-- Testimonials Preview -->
+  <section class="section">
+    <div class="container">
+      <div class="section-title" data-aos="fade-up">What Clients Say</div>
+      <p class="section-subtitle" data-aos="fade-up">Over 1,000 satisfied clients and counting</p>
+      <div class="grid-3" id="home-testimonials">
+        <div class="testimonial-card glass" data-aos="fade-up">
+          <div class="testimonial-quote">"</div>
+          <p class="testimonial-text">DJ SIX absolutely killed it at our wedding! Every song was perfect, the crowd was on their feet all night. Best decision we made!</p>
+          <div class="testimonial-author">
+            <img src="https://i.pravatar.cc/52?img=1" alt="Chioma" class="testimonial-avatar">
+            <div>
+              <div class="testimonial-name">Chioma Okafor</div>
+              <div class="testimonial-role">Bride – Lagos</div>
+            </div>
+            <div class="stars" style="margin-left:auto">★★★★★</div>
+          </div>
+        </div>
+        <div class="testimonial-card glass" data-aos="fade-up">
+          <div class="testimonial-quote">"</div>
+          <p class="testimonial-text">Best DJ in Lagos, period. He played our corporate event and had even the executives dancing! Outstanding professionalism.</p>
+          <div class="testimonial-author">
+            <img src="https://i.pravatar.cc/52?img=3" alt="Emeka" class="testimonial-avatar">
+            <div>
+              <div class="testimonial-name">Emeka Nwosu</div>
+              <div class="testimonial-role">CEO – Abuja</div>
+            </div>
+            <div class="stars" style="margin-left:auto">★★★★★</div>
+          </div>
+        </div>
+        <div class="testimonial-card glass" data-aos="fade-up">
+          <div class="testimonial-quote">"</div>
+          <p class="testimonial-text">Incredible energy, amazing music selection, and so professional. DJ SIX made my birthday unforgettable. Already booked him for next year!</p>
+          <div class="testimonial-author">
+            <img src="https://i.pravatar.cc/52?img=5" alt="Adaeze" class="testimonial-avatar">
+            <div>
+              <div class="testimonial-name">Adaeze Williams</div>
+              <div class="testimonial-role">Birthday – Port Harcourt</div>
+            </div>
+            <div class="stars" style="margin-left:auto">★★★★★</div>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:2.5rem">
+        <a href="pages/testimonials.html" class="btn btn-secondary">Read All Reviews</a>
+      </div>
+    </div>
+  </section>
+  <div class="section-divider"></div>
+
+  <!-- CTA -->
+  <section class="section">
+    <div class="container">
+      <div class="cta-section" data-aos="zoom-in">
+        <div class="cta-title neon-text">Ready To Make Your Event Legendary?</div>
+        <p class="cta-subtitle">Join over 1,000 satisfied clients who chose DJ SIX for their special moments</p>
+        <div class="cta-btns">
+          <a href="pages/booking.html" class="btn btn-primary btn-lg">🎤 Book DJ SIX Now</a>
+          <a href="https://wa.me/234000000000" class="btn btn-gold btn-lg" target="_blank">💬 WhatsApp Us</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="nav-logo" style="font-size:1.8rem">DJ SIX</div>
+          <p>International professional DJ delivering world-class entertainment across Africa and beyond.</p>
+          <div class="footer-social">
+            <a href="#" class="social-btn">📸</a>
+            <a href="#" class="social-btn">🐦</a>
+            <a href="#" class="social-btn">▶</a>
+            <a href="#" class="social-btn">📘</a>
+            <a href="#" class="social-btn">🎵</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-heading">Navigate</div>
+          <div class="footer-links">
+            <a href="index.html">Home</a>
+            <a href="pages/about.html">About DJ SIX</a>
+            <a href="pages/mixtapes.html">Mixtapes</a>
+            <a href="pages/videos.html">Videos</a>
+            <a href="pages/events.html">Events</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-heading">More</div>
+          <div class="footer-links">
+            <a href="pages/gallery.html">Gallery</a>
+            <a href="pages/testimonials.html">Testimonials</a>
+            <a href="pages/booking.html">Booking</a>
+            <a href="pages/contact.html">Contact</a>
+            <a href="pages/admin-login.html">Admin</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-heading">Contact</div>
+          <div class="footer-links">
+            <a href="tel:+234000000000">📞 +234 000 000 0000</a>
+            <a href="https://wa.me/234000000000">💬 WhatsApp</a>
+            <a href="mailto:booking@djsix.com">✉️ booking@djsix.com</a>
+            <a href="#">📍 Lagos, Nigeria</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 DJ SIX. All rights reserved.</p>
+        <p>Built for the world's best DJ</p>
+      </div>
+    </div>
+  </footer>
+  <button id="back-to-top" aria-label="Back to top">
+    <svg viewBox="0 0 24 24"><path d="M12 4l-8 8h5v8h6v-8h5z"/></svg>
+  </button>
+  <a href="https://wa.me/234000000000" class="whatsapp-float" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/music-player.js"></script>
+  <script>
+    // Build hero equalizer
+    const heroEq = document.getElementById('hero-eq');
+    if (heroEq) {
+      const heights = [10,18,28,22,14,30,24,16,26,20,12,28,18,10,24];
+      const delays  = [0,.1,.2,.05,.15,.25,.1,.2,.05,.15,.3,.1,.2,.05,.15];
+      heights.forEach((h, i) => {
+        const bar = document.createElement('div');
+        bar.className = 'eq-bar';
+        bar.style.cssText = `--min-h:${h/3}px;--max-h:${h}px;--dur:${0.4+delays[i]*2}s;animation-delay:${delays[i]}s`;
+        heroEq.appendChild(bar);
+      });
+    }
+    // Load mixtapes preview
+    async function loadHomeMixtapes() {
+      const container = document.getElementById('home-mixtapes');
+      const demos = [
+        { id:'m1', title:'AfroFusion Vol. 1', description:'Best of Afrobeats 2024', image:'https://picsum.photos/seed/mix1/400/400', releaseDate:'2024-01-15', duration:'45:00' },
+        { id:'m2', title:'Club Bangers Mix', description:'Non-stop club anthems', image:'https://picsum.photos/seed/mix2/400/400', releaseDate:'2024-03-20', duration:'60:00' },
+        { id:'m3', title:'Wedding Vibes', description:'Romantic & celebratory', image:'https://picsum.photos/seed/mix3/400/400', releaseDate:'2024-06-01', duration:'50:00' },
+      ];
+      let songs = demos;
+      try {
+        if (typeof db !== 'undefined') {
+          const snap = await db.collection('mixtapes').limit(3).get();
+          if (!snap.empty) songs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        }
+      } catch(e) {}
+      container.innerHTML = songs.map(m => `
+        <div class="card mixtape-card" data-aos="fade-up">
+          <div style="position:relative;overflow:hidden">
+            <img src="${m.image}" alt="${m.title}" class="card-img mixtape-card-img" loading="lazy">
+            <div class="mixtape-card-overlay">
+              <a href="pages/mixtapes.html" class="btn btn-primary btn-sm">🎵 Listen Now</a>
+            </div>
+          </div>
+          <div class="card-body">
+            <h3 style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.1rem;margin-bottom:0.5rem">${m.title}</h3>
+            <p style="color:var(--text2);font-size:0.85rem;margin-bottom:0.75rem">${m.description || ''}</p>
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <span class="badge badge-primary">${m.duration || ''}</span>
+              <span style="font-size:0.75rem;color:var(--text3)">${m.releaseDate ? new Date(m.releaseDate).toLocaleDateString() : ''}</span>
+            </div>
+          </div>
+        </div>`).join('');
+      initScrollAnimations();
+    }
+    loadHomeMixtapes();
+    // Particles
+    document.addEventListener('DOMContentLoaded', () => initParticles('particles'));
+
+    // Register Service Worker (PWA)
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>

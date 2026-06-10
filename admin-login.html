@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login – DJ SIX</title>
+  <link rel="stylesheet" href="../css/global.css">
+  <style>
+    body { min-height:100vh; display:flex; align-items:center; justify-content:center;
+      background: radial-gradient(ellipse at 30% 40%, rgba(138,43,226,.25) 0%, transparent 55%),
+                  radial-gradient(ellipse at 70% 70%, rgba(0,212,255,.15) 0%, transparent 50%),
+                  var(--bg);
+    }
+    .login-wrap { width:100%; max-width:420px; padding:1.5rem; }
+    .login-card {
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(40px) saturate(180%);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 24px;
+      padding: 2.5rem;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+    }
+    .login-logo {
+      text-align:center; margin-bottom:.5rem;
+      font-family:'Orbitron',sans-serif; font-size:2.5rem; font-weight:900;
+      background:linear-gradient(135deg,var(--primary),var(--accent));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .login-subtitle { text-align:center; color:var(--text3); font-size:.85rem; margin-bottom:2rem; letter-spacing:.5px; }
+    .login-title { text-align:center; font-family:'Rajdhani',sans-serif; font-size:1.4rem; font-weight:700; margin-bottom:2rem; color:var(--text); }
+    .login-divider { height:1px; background:var(--border); margin:1.5rem 0; }
+
+    .pw-wrapper { position:relative; }
+    .pw-toggle {
+      position:absolute; right:12px; top:50%; transform:translateY(-50%);
+      background:none; border:none; color:var(--text3); cursor:pointer; font-size:1rem;
+      transition:color .2s; padding:0 4px;
+    }
+    .pw-toggle:hover { color:var(--primary); }
+
+    .login-btn {
+      width:100%; padding:1rem; border-radius:50px;
+      background:linear-gradient(135deg,var(--primary),var(--secondary));
+      color:#fff; font-family:'Rajdhani',sans-serif; font-weight:700; font-size:1.05rem;
+      letter-spacing:.5px; border:none; cursor:pointer;
+      box-shadow:0 0 25px rgba(0,212,255,.35);
+      transition:all .3s; margin-top:.5rem;
+    }
+    .login-btn:hover { transform:translateY(-2px); box-shadow:0 0 40px rgba(0,212,255,.55); }
+    .login-btn:disabled { opacity:.6; cursor:not-allowed; transform:none; }
+
+    .login-error {
+      background:rgba(255,50,50,.1); border:1px solid rgba(255,50,50,.3);
+      border-radius:10px; padding:1rem; font-size:.875rem; color:#ff6b6b;
+      display:none; margin-top:1rem; text-align:center;
+    }
+    .login-error.show { display:block; animation:fadeIn .3s; }
+
+    .login-back { display:block; text-align:center; margin-top:1.5rem; color:var(--text3); font-size:.85rem; }
+    .login-back a { color:var(--primary); }
+
+    /* Particles canvas behind card */
+    #login-particles { position:fixed; inset:0; pointer-events:none; z-index:0; }
+    .login-wrap { position:relative; z-index:1; }
+
+    /* Security badge */
+    .security-badge {
+      display:flex; align-items:center; justify-content:center; gap:.5rem;
+      padding:.5rem 1rem; background:rgba(0,200,100,.08); border:1px solid rgba(0,200,100,.2);
+      border-radius:50px; font-size:.75rem; color:#00C864; margin-bottom:1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="login-particles"></canvas>
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="login-logo">DJ SIX</div>
+      <div class="login-subtitle">Admin Control Panel</div>
+      <div class="security-badge">🔒 Secured Admin Area</div>
+
+      <div class="form-group">
+        <label class="form-label">Username</label>
+        <input type="text" class="form-control" id="username" placeholder="Enter admin username" autocomplete="username">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <div class="pw-wrapper">
+          <input type="password" class="form-control" id="password" placeholder="Enter admin password" autocomplete="current-password" style="padding-right:3rem">
+          <button class="pw-toggle" id="pw-toggle" type="button">👁</button>
+        </div>
+      </div>
+
+      <button class="login-btn" id="login-btn">🔐 Sign In to Dashboard</button>
+      <div class="login-error" id="login-error">❌ Invalid username or password. Please try again.</div>
+      <div class="login-divider"></div>
+      <div class="login-back"><a href="../index.html">← Back to DJ SIX Website</a></div>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+  <script src="../js/firebase-config.js"></script>
+  <script src="../js/components.js"></script>
+  <script>
+    // Redirect if already logged in
+    if (localStorage.getItem('adminLoggedIn') === 'true') {
+      window.location.href = 'admin-dashboard.html';
+    }
+
+    const ADMIN_USERNAME = 'admin';
+    const ADMIN_PASSWORD = 'Admin123#';
+
+    function doLogin() {
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      const errorEl = document.getElementById('login-error');
+      const btn = document.getElementById('login-btn');
+
+      if (!username || !password) {
+        errorEl.textContent = '⚠️ Please enter both username and password.';
+        errorEl.classList.add('show'); return;
+      }
+      btn.textContent = 'Signing in…'; btn.disabled = true;
+
+      setTimeout(() => {
+        if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+          localStorage.setItem('adminLoggedIn', 'true');
+          btn.textContent = '✅ Access Granted!';
+          setTimeout(() => window.location.href = 'admin-dashboard.html', 600);
+        } else {
+          errorEl.textContent = '❌ Invalid username or password. Please try again.';
+          errorEl.classList.add('show');
+          btn.textContent = '🔐 Sign In to Dashboard';
+          btn.disabled = false;
+          document.getElementById('password').value = '';
+          document.getElementById('password').focus();
+        }
+      }, 800);
+    }
+
+    document.getElementById('login-btn').addEventListener('click', doLogin);
+    document.getElementById('password').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+    document.getElementById('username').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('password').focus(); });
+    document.getElementById('username').addEventListener('input', () => document.getElementById('login-error').classList.remove('show'));
+    document.getElementById('password').addEventListener('input', () => document.getElementById('login-error').classList.remove('show'));
+
+    // Password toggle
+    document.getElementById('pw-toggle').addEventListener('click', () => {
+      const inp = document.getElementById('password');
+      const btn = document.getElementById('pw-toggle');
+      if (inp.type === 'password') { inp.type = 'text'; btn.textContent = '🙈'; }
+      else { inp.type = 'password'; btn.textContent = '👁'; }
+    });
+
+    // Particle canvas (reuse initParticles from components.js)
+    document.addEventListener('DOMContentLoaded', () => {
+      const canvas = document.getElementById('login-particles');
+      const ctx = canvas.getContext('2d');
+      function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+      resize(); window.addEventListener('resize', resize);
+      const particles = [];
+      for (let i = 0; i < 60; i++) {
+        particles.push({
+          x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+          size: Math.random() * 1.5 + .5, speed: Math.random() * .4 + .1,
+          color: ['#00D4FF','#8A2BE2','#FF1493'][Math.floor(Math.random()*3)],
+          opacity: Math.random() * .4 + .1
+        });
+      }
+      function draw() {
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        particles.forEach(p => {
+          p.y -= p.speed; if (p.y < -10) { p.y = canvas.height + 10; p.x = Math.random()*canvas.width; }
+          ctx.save(); ctx.globalAlpha = p.opacity; ctx.fillStyle = p.color;
+          ctx.shadowBlur = 6; ctx.shadowColor = p.color;
+          ctx.beginPath(); ctx.arc(p.x,p.y,p.size,0,Math.PI*2); ctx.fill(); ctx.restore();
+        });
+        requestAnimationFrame(draw);
+      }
+      draw();
+    });
+  </script>
+</body>
+</html>

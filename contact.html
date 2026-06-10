@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact DJ SIX</title>
+  <link rel="stylesheet" href="../css/global.css"><link rel="stylesheet" href="../css/music-player.css">
+  <style>
+    .page-hero{min-height:35vh;display:flex;align-items:center;padding-top:100px;background:radial-gradient(ellipse at 50% 50%,rgba(255,20,147,.15) 0%,transparent 60%),var(--bg);position:relative;overflow:hidden;}
+    .page-hero-title{font-family:'Orbitron',sans-serif;font-size:clamp(2rem,6vw,4rem);font-weight:900;background:linear-gradient(135deg,var(--accent),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .breadcrumb{display:flex;align-items:center;gap:.5rem;color:var(--text3);font-size:.875rem;margin-top:.75rem;} .breadcrumb a{color:var(--primary);}
+    .contact-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:3rem;align-items:start;}
+    @media(max-width:900px){.contact-grid{grid-template-columns:1fr;}}
+    .contact-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2.5rem;backdrop-filter:blur(10px);}
+    .contact-item{display:flex;align-items:center;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--border);}
+    .contact-item:last-child{border-bottom:none;}
+    .contact-icon{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;}
+    .contact-label{font-size:.75rem;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:.2rem;}
+    .contact-value{font-family:'Rajdhani',sans-serif;font-weight:600;font-size:1rem;}
+    .contact-value a{color:inherit;transition:color .2s;} .contact-value a:hover{color:var(--primary);}
+    .social-links-row{display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1.5rem;}
+    .social-link-btn{display:flex;align-items:center;gap:.5rem;padding:.6rem 1.2rem;background:var(--surface2);border:1px solid var(--border);border-radius:50px;font-size:.85rem;font-weight:600;transition:var(--transition);}
+    .social-link-btn:hover{border-color:var(--primary);color:var(--primary);transform:translateY(-2px);}
+    .map-container{border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);margin-top:1.5rem;}
+    .map-container iframe{width:100%;height:260px;border:none;display:block;}
+    .success-message{background:rgba(0,200,100,.1);border:1px solid rgba(0,200,100,.3);border-radius:var(--radius);padding:2rem;text-align:center;display:none;}
+    .success-message.show{display:block;animation:fadeIn .5s;}
+  </style>
+</head>
+<body>
+  <div id="loader"><div class="loader-logo">DJ SIX</div><div class="loader-bar-track"><div class="loader-bar"></div></div></div>
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-logo">DJ SIX</a>
+      <div class="nav-links" id="nav-links">
+        <a href="../index.html">Home</a><a href="about.html">About</a><a href="mixtapes.html">Mixtapes</a><a href="videos.html">Videos</a><a href="events.html">Events</a><a href="gallery.html">Gallery</a><a href="testimonials.html">Testimonials</a><a href="booking.html">Booking</a>
+        <a href="contact.html" class="active">Contact</a>
+        <a href="booking.html" class="btn btn-primary btn-sm">Book Now</a>
+      </div>
+      <div class="nav-actions"><button class="theme-btn" id="theme-toggle" onclick="toggleTheme()">☀️</button><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div>
+    </div>
+  </nav>
+  <section class="page-hero"><canvas id="particles" class="particles-canvas"></canvas><div class="container"><div class="page-hero-title">Contact Us</div><div class="breadcrumb"><a href="../index.html">Home</a><span>/</span><span>Contact</span></div></div></section>
+  <div class="section-divider"></div>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-title" data-aos="fade-up">Get In Touch</div>
+      <p class="section-subtitle" data-aos="fade-up">Ready to make your event legendary? Let's talk.</p>
+      <div class="contact-grid">
+        <div data-aos="fade-right">
+          <div class="contact-card">
+            <div style="font-family:'Orbitron',sans-serif;font-size:1.1rem;font-weight:700;color:var(--primary);margin-bottom:1.5rem">Contact Information</div>
+            <div class="contact-item">
+              <div class="contact-icon" style="background:rgba(0,212,255,.1)">📞</div>
+              <div><div class="contact-label">Phone</div><div class="contact-value"><a href="tel:+234000000000">+234 000 000 0000</a></div></div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon" style="background:rgba(37,211,102,.1)">💬</div>
+              <div><div class="contact-label">WhatsApp</div><div class="contact-value"><a href="https://wa.me/234000000000" target="_blank">+234 000 000 0000</a></div></div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon" style="background:rgba(255,20,147,.1)">✉️</div>
+              <div><div class="contact-label">Email</div><div class="contact-value"><a href="mailto:booking@djsix.com">booking@djsix.com</a></div></div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon" style="background:rgba(255,215,0,.1)">📍</div>
+              <div><div class="contact-label">Location</div><div class="contact-value">Lagos, Nigeria<br><small style="color:var(--text3)">Available internationally</small></div></div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon" style="background:rgba(138,43,226,.1)">⏰</div>
+              <div><div class="contact-label">Business Hours</div><div class="contact-value">Mon – Sat: 9am – 8pm<br><small style="color:var(--text3)">Sunday by appointment</small></div></div>
+            </div>
+            <div style="border-top:1px solid var(--border);padding-top:1.5rem;margin-top:.5rem">
+              <div style="font-size:.75rem;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:.75rem">Follow DJ SIX</div>
+              <div class="social-links-row">
+                <a href="#" class="social-link-btn">📸 Instagram</a>
+                <a href="#" class="social-link-btn">🐦 Twitter</a>
+                <a href="#" class="social-link-btn">▶ YouTube</a>
+                <a href="#" class="social-link-btn">📘 Facebook</a>
+                <a href="#" class="social-link-btn">🎵 TikTok</a>
+              </div>
+            </div>
+          </div>
+          <div class="map-container" style="margin-top:1.5rem">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d253682.4558715548!2d3.1191!3d6.5244!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103b8b2ae68280c1%3A0xdc9e87a367c3d9cb!2sLagos!5e0!3m2!1sen!2sng!4v1630000000000!5m2!1sen!2sng" title="Lagos Map" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
+        </div>
+
+        <div data-aos="fade-left">
+          <div class="contact-card">
+            <div style="font-family:'Orbitron',sans-serif;font-size:1.1rem;font-weight:700;color:var(--primary);margin-bottom:2rem">Send A Message</div>
+            <div id="contact-success" class="success-message">
+              <div style="font-size:3rem;margin-bottom:1rem">✅</div>
+              <div style="font-family:'Rajdhani',sans-serif;font-size:1.2rem;font-weight:700;color:#00C864;margin-bottom:.5rem">Message Sent!</div>
+              <p style="color:var(--text2)">Thank you for reaching out. DJ SIX will get back to you within 24 hours.</p>
+            </div>
+            <div id="contact-form-wrap">
+              <div class="form-group"><label class="form-label">Full Name *</label><input type="text" class="form-control" id="c-name" placeholder="Your full name"></div>
+              <div class="form-group"><label class="form-label">Email Address *</label><input type="email" class="form-control" id="c-email" placeholder="your@email.com"></div>
+              <div class="form-group"><label class="form-label">Subject *</label><input type="text" class="form-control" id="c-subject" placeholder="What is this regarding?"></div>
+              <div class="form-group"><label class="form-label">Message *</label><textarea class="form-control" id="c-message" rows="6" placeholder="Type your message here…"></textarea></div>
+              <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:1rem">
+                <button class="btn btn-primary btn-lg" id="send-msg" style="flex:1;justify-content:center">✉️ Send Message</button>
+                <a href="https://wa.me/234000000000" class="btn btn-gold btn-lg" target="_blank">💬 WhatsApp</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><div class="nav-logo" style="font-size:1.8rem">DJ SIX</div><p>International professional DJ.</p></div><div><div class="footer-heading">Navigate</div><div class="footer-links"><a href="../index.html">Home</a><a href="about.html">About</a><a href="mixtapes.html">Mixtapes</a><a href="booking.html">Booking</a></div></div><div><div class="footer-heading">Contact</div><div class="footer-links"><a href="tel:+234000000000">📞 +234 000 000 0000</a><a href="mailto:booking@djsix.com">✉️ booking@djsix.com</a></div></div></div><div class="footer-bottom"><p>© 2025 DJ SIX. All rights reserved.</p></div></div></footer>
+  <button id="back-to-top"><svg viewBox="0 0 24 24"><path d="M12 4l-8 8h5v8h6v-8h5z"/></svg></button>
+  <a href="https://wa.me/234000000000" class="whatsapp-float" target="_blank"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+  <script src="../js/firebase-config.js"></script><script src="../js/components.js"></script><script src="../js/music-player.js"></script>
+  <script>
+    document.getElementById('send-msg').addEventListener('click', async()=>{
+      const name=document.getElementById('c-name').value.trim();
+      const email=document.getElementById('c-email').value.trim();
+      const subject=document.getElementById('c-subject').value.trim();
+      const message=document.getElementById('c-message').value.trim();
+      if(!name||!email||!subject||!message){ showToast('Please fill in all fields.','error'); return; }
+      const btn=document.getElementById('send-msg');
+      btn.textContent='Sending…'; btn.disabled=true;
+      try {
+        if(typeof db!=='undefined'){
+          await db.collection('messages').add({ name,email,subject,message,createdAt:firebase.firestore.FieldValue.serverTimestamp() });
+        }
+        document.getElementById('contact-form-wrap').style.display='none';
+        document.getElementById('contact-success').classList.add('show');
+        showToast('Message sent!');
+      } catch(e){
+        showToast('Failed to send. Please try WhatsApp.','error');
+        btn.textContent='✉️ Send Message'; btn.disabled=false;
+      }
+    });
+    document.addEventListener('DOMContentLoaded',()=>{ initParticles('particles'); });
+  </script>
+</body>
+</html>

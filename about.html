@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About DJ SIX – International Professional DJ</title>
+  <meta name="description" content="Learn about DJ SIX – his journey, achievements, awards and career milestones as an international professional DJ.">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/music-player.css">
+  <style>
+    .page-hero {
+      min-height: 40vh;
+      display: flex;
+      align-items: center;
+      padding-top: 100px;
+      background: radial-gradient(ellipse at 60% 50%, rgba(138,43,226,0.2) 0%, transparent 60%),
+                  radial-gradient(ellipse at 20% 30%, rgba(0,212,255,0.15) 0%, transparent 50%),
+                  var(--bg);
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2rem, 6vw, 4rem);
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .breadcrumb { display: flex; align-items: center; gap: 0.5rem; color: var(--text3); font-size: 0.875rem; margin-top: 0.75rem; }
+    .breadcrumb a { color: var(--primary); transition: opacity 0.2s; }
+    .breadcrumb a:hover { opacity: 0.7; }
+
+    .bio-grid { display: grid; grid-template-columns: 1fr 1.6fr; gap: 4rem; align-items: start; }
+    @media(max-width:900px){ .bio-grid { grid-template-columns: 1fr; } }
+
+    .bio-img-wrapper { position: sticky; top: 100px; }
+    .bio-img {
+      width: 100%;
+      border-radius: var(--radius-lg);
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      border: 2px solid rgba(0,212,255,0.3);
+      box-shadow: 0 30px 80px rgba(0,212,255,0.15);
+    }
+    .bio-badges { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; }
+
+    .bio-text h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1.5rem;
+    }
+    .bio-text p { color: var(--text2); line-height: 1.85; margin-bottom: 1.25rem; font-size: 1rem; }
+
+    /* Timeline */
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--primary), var(--secondary), var(--accent));
+    }
+    .timeline-item { position: relative; margin-bottom: 2.5rem; }
+    .timeline-dot {
+      position: absolute;
+      left: -2.45rem;
+      top: 0.3rem;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: var(--primary);
+      border: 2px solid var(--bg);
+      box-shadow: 0 0 10px var(--primary);
+    }
+    .timeline-year {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: 1px;
+      margin-bottom: 0.35rem;
+    }
+    .timeline-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 0.4rem;
+    }
+    .timeline-desc { font-size: 0.875rem; color: var(--text2); line-height: 1.6; }
+
+    /* Stats Band */
+    .stats-band {
+      background: linear-gradient(135deg, rgba(0,212,255,0.07), rgba(138,43,226,0.07));
+      border: 1px solid rgba(0,212,255,0.12);
+      border-radius: var(--radius-lg);
+      padding: 3rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 2rem;
+      text-align: center;
+    }
+    .stats-band-num {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .stats-band-label { font-size: 0.8rem; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; margin-top: 0.3rem; }
+
+    /* Awards */
+    .awards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; }
+    .award-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      backdrop-filter: blur(10px);
+      transition: var(--transition);
+    }
+    .award-card:hover { border-color: rgba(255,215,0,0.4); transform: translateY(-4px); }
+    .award-icon { font-size: 2rem; flex-shrink: 0; }
+    .award-title { font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: 0.25rem; }
+    .award-year { font-size: 0.78rem; color: var(--gold); }
+
+    /* Skills */
+    .skill-bar-wrap { margin-bottom: 1.25rem; }
+    .skill-label { display: flex; justify-content: space-between; font-size: 0.875rem; font-weight: 600; margin-bottom: 0.4rem; }
+    .skill-track { height: 6px; background: var(--surface2); border-radius: 6px; overflow: hidden; }
+    .skill-fill {
+      height: 100%;
+      border-radius: 6px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      width: 0%;
+      transition: width 1.5s ease;
+      box-shadow: 0 0 8px rgba(0,212,255,0.5);
+    }
+
+    /* Brands */
+    .brands-grid { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; }
+    .brand-pill {
+      padding: 0.6rem 1.5rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--text2);
+      transition: var(--transition);
+    }
+    .brand-pill:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-2px); }
+  </style>
+</head>
+<body>
+  <div id="loader"><div class="loader-logo">DJ SIX</div><div class="loader-bar-track"><div class="loader-bar"></div></div></div>
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-logo">DJ SIX</a>
+      <div class="nav-links" id="nav-links">
+        <a href="../index.html">Home</a>
+        <a href="about.html" class="active">About</a>
+        <a href="mixtapes.html">Mixtapes</a>
+        <a href="videos.html">Videos</a>
+        <a href="events.html">Events</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="testimonials.html">Testimonials</a>
+        <a href="booking.html">Booking</a>
+        <a href="contact.html">Contact</a>
+        <a href="booking.html" class="btn btn-primary btn-sm">Book Now</a>
+      </div>
+      <div class="nav-actions">
+        <button class="theme-btn" id="theme-toggle" onclick="toggleTheme()">☀️</button>
+        <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Hero -->
+  <section class="page-hero">
+    <canvas id="particles" class="particles-canvas"></canvas>
+    <div class="container">
+      <div class="page-hero-title">About DJ SIX</div>
+      <div class="breadcrumb"><a href="../index.html">Home</a> <span>/</span> <span>About</span></div>
+    </div>
+  </section>
+  <div class="section-divider"></div>
+
+  <!-- Bio -->
+  <section class="section">
+    <div class="container">
+      <div class="bio-grid">
+        <div class="bio-img-wrapper" data-aos="fade-right">
+          <img src="https://images.unsplash.com/photo-1571266028243-e4733b0f0bb0?w=600&h=800&fit=crop" alt="DJ SIX" class="bio-img">
+          <div class="bio-badges">
+            <span class="badge badge-primary">🎧 15+ Years</span>
+            <span class="badge badge-secondary">🌍 20+ Countries</span>
+            <span class="badge badge-accent">🏆 Award Winner</span>
+            <span class="badge badge-gold">⭐ 1000+ Events</span>
+          </div>
+        </div>
+        <div class="bio-text" data-aos="fade-left">
+          <h2>The Story of DJ SIX</h2>
+          <p>Born and raised in Lagos, Nigeria, DJ SIX discovered his passion for music at the age of 12 when he stumbled upon his uncle's record collection. What started as a childhood obsession quickly evolved into a professional career that would take him from the streets of Lagos to the world's most prestigious stages.</p>
+          <p>Over more than 15 years in the industry, DJ SIX has become synonymous with excellence, precision, and an unmatched ability to read and move any crowd. His unique sound blends the rich rhythms of Afrobeats and Amapiano with international genres including Hip-Hop, R&B, House, and Electronic Dance Music.</p>
+          <p>DJ SIX has shared the stage with some of Africa's biggest artists including Burna Boy, Wizkid, Davido, Tiwa Savage and many more. His residencies at top Lagos nightclubs and his appearances at international festivals have cemented his reputation as one of the continent's most versatile and in-demand DJs.</p>
+          <p>Beyond the decks, DJ SIX is passionate about mentoring the next generation of Nigerian DJs and giving back to the music community that shaped him. He runs annual masterclasses and workshops for aspiring DJs across Lagos.</p>
+          <p>Whether it's an intimate wedding for 50 guests or a festival crowd of 50,000 — DJ SIX brings the same level of dedication, energy, and artistry to every single performance.</p>
+
+          <div style="margin-top:2rem">
+            <h3 style="font-family:'Orbitron',sans-serif;font-size:1.1rem;color:var(--primary);margin-bottom:1.5rem">Skills & Expertise</h3>
+            <div id="skills-container">
+              <div class="skill-bar-wrap"><div class="skill-label"><span>Crowd Reading</span><span>99%</span></div><div class="skill-track"><div class="skill-fill" data-width="99"></div></div></div>
+              <div class="skill-bar-wrap"><div class="skill-label"><span>Music Mixing</span><span>97%</span></div><div class="skill-track"><div class="skill-fill" data-width="97"></div></div></div>
+              <div class="skill-bar-wrap"><div class="skill-label"><span>Afrobeats & Amapiano</span><span>98%</span></div><div class="skill-track"><div class="skill-fill" data-width="98"></div></div></div>
+              <div class="skill-bar-wrap"><div class="skill-label"><span>Live Production</span><span>92%</span></div><div class="skill-track"><div class="skill-fill" data-width="92"></div></div></div>
+              <div class="skill-bar-wrap"><div class="skill-label"><span>Event Management</span><span>90%</span></div><div class="skill-track"><div class="skill-fill" data-width="90"></div></div></div>
+              <div class="skill-bar-wrap"><div class="skill-label"><span>Music Production</span><span>85%</span></div><div class="skill-track"><div class="skill-fill" data-width="85"></div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="section-divider"></div>
+
+  <!-- Stats Band -->
+  <section class="section" style="background:var(--bg2)">
+    <div class="container">
+      <div class="stats-band" data-aos="zoom-in">
+        <div><div class="stats-band-num"><span data-count="500">0</span>+</div><div class="stats-band-label">Events Performed</div></div>
+        <div><div class="stats-band-num"><span data-count="1000">0</span>+</div><div class="stats-band-label">Happy Clients</div></div>
+        <div><div class="stats-band-num"><span data-count="50">0</span>+</div><div class="stats-band-label">Mixtapes Released</div></div>
+        <div><div class="stats-band-num"><span data-count="15">0</span>+</div><div class="stats-band-label">Years Experience</div></div>
+        <div><div class="stats-band-num"><span data-count="20">0</span>+</div><div class="stats-band-label">Countries Performed</div></div>
+        <div><div class="stats-band-num"><span data-count="12">0</span></div><div class="stats-band-label">Awards Won</div></div>
+      </div>
+    </div>
+  </section>
+  <div class="section-divider"></div>
+
+  <!-- Career Timeline -->
+  <section class="section">
+    <div class="container">
+      <div class="section-title" data-aos="fade-up">Career Journey</div>
+      <p class="section-subtitle" data-aos="fade-up">From Lagos to the World</p>
+      <div style="max-width:700px;margin:0 auto">
+        <div class="timeline">
+          <div class="timeline-item" data-aos="fade-up">
+            <div class="timeline-dot"></div>
+            <div class="timeline-year">2009</div>
+            <div class="timeline-title">The Beginning</div>
+            <div class="timeline-desc">Started DJing at local Lagos events and house parties, quickly earning a reputation for his unique music selection and crowd-rocking skills.</div>
+          </div>
+          <div class="timeline-item" data-aos="fade-up">
+            <div class="timeline-dot"></div>
+            <div class="timeline-year">2011</div>
+            <div class="timeline-title">First Club Residency</div>
+            <div class="timeline-desc">Landed his first major club residency at Club Quilox in Lagos, one of Nigeria's premier nightclubs, performing weekly to thousands of guests.</div>
+          </div>
+          <div class="timeline-item" data-aos="fade-up">
+            <div class="timeline-dot"></div>
+            <div class="timeline-year">2014</div>
+            <div class="timeline-title">First Mixtape Release</div>
+            <div class="timeline-desc">Released his debut mixtape "Lagos to the World" which went viral across Nigerian social media and gained over 100,000 downloads in its first week.</div>
+          </div>
+          <div class="timeline-item" data-aos="fade-up">
+            <div class="timeline-dot"></div>
+            <div class="timeline-year">2016</div>
+            <div class="timeline-title">International Breakthrough</div>
+            <div class="timeline-desc">Performed at his first international festival in London, opening for major Afrobeats artists. This marked the beginning of his international touring career.</div>
+          </div>
+          <div class="timeline-item" data-aos="fade-up">
+            <div class="timeline-dot"></div>
+            <div class="timeline-year">2018</div>
+            <div class="timeline-title">Best DJ Award – Nigeria</div>
+            <div class="timeline-desc">Won the prestigious Nigeria Entertainment Awards for Best DJ, recognizing his outstanding contribution to the Nigerian music industry.</div>
+          </div>
+          <div class="timeline-item" data-aos="fade-up">
+            <div class="timeline-dot" style="background:var(--accent)"></div>
+            <div class="timeline-year">2020 – 2024</div>
+            <div class="timeline-title">Global Recognition</div>
+            <div class="timeline-desc">Expanded performances to over 20 countries, collaborated with top African artists, and established himself as one of Africa's premier international DJs.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="section-divider"></div>
+
+  <!-- Awards -->
+  <section class="section" style="background:var(--bg2)">
+    <div class="container">
+      <div class="section-title" data-aos="fade-up">Awards & Recognition</div>
+      <p class="section-subtitle" data-aos="fade-up">Excellence recognized at every level</p>
+      <div class="awards-grid">
+        <div class="award-card" data-aos="fade-up"><span class="award-icon">🏆</span><div><div class="award-title">Best DJ of the Year</div><div class="award-year">Nigeria Entertainment Awards – 2023</div></div></div>
+        <div class="award-card" data-aos="fade-up"><span class="award-icon">🥇</span><div><div class="award-title">Top African DJ</div><div class="award-year">Africa Music Awards – 2022</div></div></div>
+        <div class="award-card" data-aos="fade-up"><span class="award-icon">🎖️</span><div><div class="award-title">Crowd Entertainer Award</div><div class="award-year">Lagos Nightlife Awards – 2021</div></div></div>
+        <div class="award-card" data-aos="fade-up"><span class="award-icon">🌟</span><div><div class="award-title">International DJ of the Year</div><div class="award-year">West Africa Music Awards – 2020</div></div></div>
+        <div class="award-card" data-aos="fade-up"><span class="award-icon">🎵</span><div><div class="award-title">Best Mixtape of the Year</div><div class="award-year">Nigerian DJ Awards – 2019</div></div></div>
+        <div class="award-card" data-aos="fade-up"><span class="award-icon">💫</span><div><div class="award-title">Rising Star Award</div><div class="award-year">Nigeria Music Awards – 2018</div></div></div>
+        <div class="award-card" data-aos="fade-up"><span class="award-icon">🎤</span><div><div class="award-title">Best Event DJ</div><div class="award-year">Event Industry Awards – 2017</div></div></div>
+        <div class="award-card" data-aos="fade-up"><span class="award-icon">🔥</span><div><div class="award-title">Hottest DJ in Lagos</div><div class="award-year">Lagos City Awards – 2016</div></div></div>
+      </div>
+    </div>
+  </section>
+  <div class="section-divider"></div>
+
+  <!-- Client Brands -->
+  <section class="section">
+    <div class="container">
+      <div class="section-title" data-aos="fade-up">Brands & Clients</div>
+      <p class="section-subtitle" data-aos="fade-up">Trusted by Nigeria's biggest brands and international companies</p>
+      <div class="brands-grid" data-aos="fade-up">
+        <div class="brand-pill">Guaranty Trust Bank</div>
+        <div class="brand-pill">MTN Nigeria</div>
+        <div class="brand-pill">Heineken</div>
+        <div class="brand-pill">Ciroc</div>
+        <div class="brand-pill">Nike Nigeria</div>
+        <div class="brand-pill">Google Africa</div>
+        <div class="brand-pill">Access Bank</div>
+        <div class="brand-pill">Pepsi Nigeria</div>
+        <div class="brand-pill">Jumia</div>
+        <div class="brand-pill">Flutterwave</div>
+        <div class="brand-pill">Airtel Nigeria</div>
+        <div class="brand-pill">Sterling Bank</div>
+        <div class="brand-pill">Hennessy</div>
+        <div class="brand-pill">Moet & Chandon</div>
+        <div class="brand-pill">Red Bull</div>
+        <div class="brand-pill">Diageo</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="nav-logo" style="font-size:1.8rem">DJ SIX</div>
+          <p>International professional DJ delivering world-class entertainment across Africa and beyond.</p>
+          <div class="footer-social">
+            <a href="#" class="social-btn">📸</a><a href="#" class="social-btn">🐦</a><a href="#" class="social-btn">▶</a><a href="#" class="social-btn">📘</a>
+          </div>
+        </div>
+        <div><div class="footer-heading">Navigate</div><div class="footer-links"><a href="../index.html">Home</a><a href="about.html">About</a><a href="mixtapes.html">Mixtapes</a><a href="videos.html">Videos</a><a href="events.html">Events</a></div></div>
+        <div><div class="footer-heading">More</div><div class="footer-links"><a href="gallery.html">Gallery</a><a href="testimonials.html">Testimonials</a><a href="booking.html">Booking</a><a href="contact.html">Contact</a></div></div>
+        <div><div class="footer-heading">Contact</div><div class="footer-links"><a href="tel:+234000000000">📞 +234 000 000 0000</a><a href="mailto:booking@djsix.com">✉️ booking@djsix.com</a><a href="#">📍 Lagos, Nigeria</a></div></div>
+      </div>
+      <div class="footer-bottom"><p>© 2025 DJ SIX. All rights reserved.</p></div>
+    </div>
+  </footer>
+  <button id="back-to-top"><svg viewBox="0 0 24 24"><path d="M12 4l-8 8h5v8h6v-8h5z"/></svg></button>
+  <a href="https://wa.me/234000000000" class="whatsapp-float" target="_blank">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+  <script src="../js/firebase-config.js"></script>
+  <script src="../js/components.js"></script>
+  <script src="../js/music-player.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      initParticles('particles');
+      // Animate skill bars on scroll
+      const skillFills = document.querySelectorAll('.skill-fill');
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.style.width = e.target.dataset.width + '%';
+            obs.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.3 });
+      skillFills.forEach(f => obs.observe(f));
+    });
+  </script>
+</body>
+</html>

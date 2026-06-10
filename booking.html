@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book DJ SIX – Professional DJ Booking</title>
+  <meta name="description" content="Book DJ SIX for your wedding, corporate event, club night or birthday party. Nigeria's premier international DJ.">
+  <link rel="stylesheet" href="../css/global.css"><link rel="stylesheet" href="../css/music-player.css">
+  <style>
+    .page-hero { min-height:35vh;display:flex;align-items:center;padding-top:100px;background:radial-gradient(ellipse at 60% 50%,rgba(0,212,255,.15) 0%,transparent 60%),var(--bg);position:relative;overflow:hidden; }
+    .page-hero-title { font-family:'Orbitron',sans-serif;font-size:clamp(2rem,6vw,4rem);font-weight:900;background:linear-gradient(135deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
+    .breadcrumb{display:flex;align-items:center;gap:.5rem;color:var(--text3);font-size:.875rem;margin-top:.75rem;} .breadcrumb a{color:var(--primary);}
+
+    .booking-grid { display:grid;grid-template-columns:1fr 1.3fr;gap:3rem;align-items:start; }
+    @media(max-width:900px){ .booking-grid{grid-template-columns:1fr;} }
+
+    .booking-info-card { background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2.5rem;backdrop-filter:blur(10px);position:sticky;top:100px; }
+    .booking-info-title { font-family:'Orbitron',sans-serif;font-size:1.2rem;font-weight:700;color:var(--primary);margin-bottom:1.5rem; }
+    .booking-info-item { display:flex;align-items:flex-start;gap:1rem;margin-bottom:1.5rem; }
+    .booking-info-icon { font-size:1.4rem;flex-shrink:0;margin-top:.1rem; }
+    .booking-info-label { font-size:.75rem;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:.2rem; }
+    .booking-info-value { font-family:'Rajdhani',sans-serif;font-weight:600;font-size:1rem; }
+
+    .event-types { display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.5rem; }
+    .event-type-pill { padding:.4rem 1rem;background:var(--surface2);border:1px solid var(--border);border-radius:50px;font-size:.8rem;font-weight:600;transition:var(--transition); }
+    .event-type-pill:hover { border-color:var(--primary);color:var(--primary); }
+
+    .booking-form-card { background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2.5rem;backdrop-filter:blur(10px); }
+    .booking-form-title { font-family:'Orbitron',sans-serif;font-size:1.3rem;font-weight:700;color:var(--primary);margin-bottom:2rem; }
+
+    .form-row { display:grid;grid-template-columns:1fr 1fr;gap:1rem; }
+    @media(max-width:600px){ .form-row{grid-template-columns:1fr;} }
+
+    .form-actions { display:flex;gap:1rem;flex-wrap:wrap;margin-top:2rem; }
+
+    .success-message { background:rgba(0,200,100,.1);border:1px solid rgba(0,200,100,.3);border-radius:var(--radius);padding:2rem;text-align:center;display:none; }
+    .success-message.show { display:block;animation:fadeIn .5s; }
+    .success-icon { font-size:3rem;margin-bottom:1rem; }
+    .success-title { font-family:'Rajdhani',sans-serif;font-size:1.3rem;font-weight:700;color:#00C864;margin-bottom:.5rem; }
+  </style>
+</head>
+<body>
+  <div id="loader"><div class="loader-logo">DJ SIX</div><div class="loader-bar-track"><div class="loader-bar"></div></div></div>
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-logo">DJ SIX</a>
+      <div class="nav-links" id="nav-links">
+        <a href="../index.html">Home</a><a href="about.html">About</a><a href="mixtapes.html">Mixtapes</a><a href="videos.html">Videos</a><a href="events.html">Events</a><a href="gallery.html">Gallery</a><a href="testimonials.html">Testimonials</a>
+        <a href="booking.html" class="active">Booking</a>
+        <a href="contact.html">Contact</a>
+        <a href="booking.html" class="btn btn-primary btn-sm">Book Now</a>
+      </div>
+      <div class="nav-actions"><button class="theme-btn" id="theme-toggle" onclick="toggleTheme()">☀️</button><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div>
+    </div>
+  </nav>
+  <section class="page-hero"><canvas id="particles" class="particles-canvas"></canvas><div class="container"><div class="page-hero-title">Book DJ SIX</div><div class="breadcrumb"><a href="../index.html">Home</a><span>/</span><span>Booking</span></div></div></section>
+  <div class="section-divider"></div>
+
+  <section class="section">
+    <div class="container">
+      <div class="booking-grid">
+        <!-- Info Panel -->
+        <div data-aos="fade-right">
+          <div class="booking-info-card">
+            <div class="booking-info-title">Booking Information</div>
+            <div class="booking-info-item"><span class="booking-info-icon">📞</span><div><div class="booking-info-label">Phone / WhatsApp</div><div class="booking-info-value">+234 000 000 0000</div></div></div>
+            <div class="booking-info-item"><span class="booking-info-icon">✉️</span><div><div class="booking-info-label">Email</div><div class="booking-info-value">booking@djsix.com</div></div></div>
+            <div class="booking-info-item"><span class="booking-info-icon">📍</span><div><div class="booking-info-label">Base Location</div><div class="booking-info-value">Lagos, Nigeria<br><small style="color:var(--text3)">Available internationally</small></div></div></div>
+            <div class="booking-info-item"><span class="booking-info-icon">⏱</span><div><div class="booking-info-label">Response Time</div><div class="booking-info-value">Within 24 hours</div></div></div>
+            <div class="booking-info-item"><span class="booking-info-icon">📅</span><div><div class="booking-info-label">Advance Booking</div><div class="booking-info-value">Minimum 2 weeks notice</div></div></div>
+
+            <div style="border-top:1px solid var(--border);padding-top:1.5rem;margin-top:.5rem">
+              <div class="booking-info-label" style="margin-bottom:1rem">Event Types</div>
+              <div class="event-types">
+                <span class="event-type-pill">💒 Weddings</span>
+                <span class="event-type-pill">🎉 Club Nights</span>
+                <span class="event-type-pill">🏢 Corporate</span>
+                <span class="event-type-pill">🎂 Birthdays</span>
+                <span class="event-type-pill">🎤 Concerts</span>
+                <span class="event-type-pill">🌍 International</span>
+              </div>
+            </div>
+
+            <div style="border-top:1px solid var(--border);padding-top:1.5rem;margin-top:.5rem">
+              <div class="booking-info-label" style="margin-bottom:.75rem">Quick Booking</div>
+              <a href="https://wa.me/234000000000?text=Hi%20DJ%20SIX,%20I%20would%20like%20to%20book%20you%20for%20my%20event!" class="btn btn-gold" style="width:100%;justify-content:center" target="_blank">
+                💬 Book via WhatsApp
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form -->
+        <div data-aos="fade-left">
+          <div class="booking-form-card">
+            <div class="booking-form-title">🎤 Submit Booking Request</div>
+
+            <div id="success-msg" class="success-message">
+              <div class="success-icon">🎉</div>
+              <div class="success-title">Booking Request Submitted!</div>
+              <p style="color:var(--text2)">Thank you! DJ SIX will contact you within 24 hours to confirm your booking.</p>
+              <div style="margin-top:1.5rem">
+                <a href="https://wa.me/234000000000" class="btn btn-gold" target="_blank">💬 Follow up on WhatsApp</a>
+              </div>
+            </div>
+
+            <div id="booking-form-wrap">
+              <div class="form-row">
+                <div class="form-group"><label class="form-label">Full Name *</label><input type="text" class="form-control" id="b-name" placeholder="Your full name" required></div>
+                <div class="form-group"><label class="form-label">Phone Number *</label><input type="tel" class="form-control" id="b-phone" placeholder="+234 000 000 0000" required></div>
+              </div>
+              <div class="form-group"><label class="form-label">Email Address *</label><input type="email" class="form-control" id="b-email" placeholder="your@email.com" required></div>
+              <div class="form-row">
+                <div class="form-group"><label class="form-label">Event Type *</label>
+                  <select class="form-control" id="b-event-type">
+                    <option value="">Select event type</option>
+                    <option>Wedding</option><option>Club Night</option><option>Corporate Event</option>
+                    <option>Birthday Party</option><option>Concert / Festival</option><option>Private Party</option><option>Other</option>
+                  </select>
+                </div>
+                <div class="form-group"><label class="form-label">Event Date *</label><input type="date" class="form-control" id="b-date" required></div>
+              </div>
+              <div class="form-group"><label class="form-label">Event Location *</label><input type="text" class="form-control" id="b-location" placeholder="City, Venue name" required></div>
+              <div class="form-group"><label class="form-label">Budget Range *</label>
+                <select class="form-control" id="b-budget">
+                  <option value="">Select budget range</option>
+                  <option>₦200,000 – ₦500,000</option><option>₦500,000 – ₦1,000,000</option>
+                  <option>₦1,000,000 – ₦2,000,000</option><option>₦2,000,000+</option><option>International Budget</option>
+                </select>
+              </div>
+              <div class="form-group"><label class="form-label">Additional Details</label><textarea class="form-control" id="b-message" rows="4" placeholder="Tell us more about your event – expected guests, music preferences, duration, special requests…"></textarea></div>
+              <div class="form-actions">
+                <button class="btn btn-primary btn-lg" id="submit-booking" style="flex:1;justify-content:center">🎤 Submit Booking Request</button>
+                <a href="https://wa.me/234000000000?text=Hi%20DJ%20SIX,%20I%20want%20to%20book%20you!" class="btn btn-gold btn-lg" target="_blank">💬 WhatsApp</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><div class="nav-logo" style="font-size:1.8rem">DJ SIX</div><p>International professional DJ.</p></div><div><div class="footer-heading">Navigate</div><div class="footer-links"><a href="../index.html">Home</a><a href="about.html">About</a><a href="mixtapes.html">Mixtapes</a><a href="events.html">Events</a></div></div><div><div class="footer-heading">Contact</div><div class="footer-links"><a href="tel:+234000000000">📞 +234 000 000 0000</a><a href="mailto:booking@djsix.com">✉️ booking@djsix.com</a></div></div></div><div class="footer-bottom"><p>© 2025 DJ SIX. All rights reserved.</p></div></div></footer>
+  <button id="back-to-top"><svg viewBox="0 0 24 24"><path d="M12 4l-8 8h5v8h6v-8h5z"/></svg></button>
+  <a href="https://wa.me/234000000000" class="whatsapp-float" target="_blank"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+  <script src="../js/firebase-config.js"></script><script src="../js/components.js"></script><script src="../js/music-player.js"></script>
+  <script>
+    document.getElementById('submit-booking').addEventListener('click', async()=>{
+      const name=document.getElementById('b-name').value.trim();
+      const phone=document.getElementById('b-phone').value.trim();
+      const email=document.getElementById('b-email').value.trim();
+      const eventType=document.getElementById('b-event-type').value;
+      const date=document.getElementById('b-date').value;
+      const location=document.getElementById('b-location').value.trim();
+      const budget=document.getElementById('b-budget').value;
+      const message=document.getElementById('b-message').value.trim();
+
+      if(!name||!phone||!email||!eventType||!date||!location||!budget){
+        showToast('Please fill in all required fields.','error'); return;
+      }
+      const btn=document.getElementById('submit-booking');
+      btn.textContent='Submitting…'; btn.disabled=true;
+
+      const booking={ name,phone,email,eventType,eventDate:date,location,budget,message,status:'pending',createdAt:new Date().toISOString() };
+
+      try {
+        if(typeof db!=='undefined'){
+          await db.collection('bookings').add({ ...booking, createdAt:firebase.firestore.FieldValue.serverTimestamp() });
+        }
+        document.getElementById('booking-form-wrap').style.display='none';
+        document.getElementById('success-msg').classList.add('show');
+        showToast('Booking request submitted!');
+      } catch(e){
+        showToast('Submission failed. Please try WhatsApp instead.','error');
+        btn.textContent='🎤 Submit Booking Request'; btn.disabled=false;
+      }
+    });
+    document.addEventListener('DOMContentLoaded',()=>{ initParticles('particles'); const minDate=new Date();minDate.setDate(minDate.getDate()+14);document.getElementById('b-date').min=minDate.toISOString().split('T')[0]; });
+  </script>
+</body>
+</html>
