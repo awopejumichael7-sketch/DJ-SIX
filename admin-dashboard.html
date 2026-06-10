@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard – DJ SIX</title>
-  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="global.css">
   <style>
     /* ── Admin Layout ── */
     body { overflow-x:hidden; }
@@ -360,9 +360,9 @@
       <div class="settings-section">
         <div class="settings-title">DJ SIX Profile</div>
         <div class="form-group"><label class="form-label">DJ Name</label><input class="form-control" value="DJ SIX"></div>
-        <div class="form-group"><label class="form-label">Phone / WhatsApp</label><input class="form-control" value="+234 000 000 0000"></div>
-        <div class="form-group"><label class="form-label">Email</label><input class="form-control" value="booking@djsix.com"></div>
-        <div class="form-group"><label class="form-label">Location</label><input class="form-control" value="Lagos, Nigeria"></div>
+        <div class="form-group"><label class="form-label">Phone / WhatsApp</label><input class="form-control" value="+2348079731695"></div>
+        <div class="form-group"><label class="form-label">Email</label><input class="form-control" value="dj6damams@gmail.com"></div>
+        <div class="form-group"><label class="form-label">Location</label><input class="form-control" value="Ogun State, Nigeria"></div>
         <div class="form-group"><label class="form-label">Bio</label><textarea class="form-control" rows="4">Nigeria's premier international DJ with 15+ years of experience.</textarea></div>
         <button class="btn btn-primary" onclick="showToast('Profile settings saved!')">💾 Save Settings</button>
       </div>
@@ -416,8 +416,8 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
-  <script src="../js/firebase-config.js"></script>
-  <script src="../js/components.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="components.js"></script>
   <script>
     // ── Auth Guard ──
     if (localStorage.getItem('adminLoggedIn') !== 'true') window.location.href = 'admin-login.html';
